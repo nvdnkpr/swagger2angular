@@ -1,0 +1,61 @@
+import { {{#resourceDefinition.httpLibraries}}{{this}}{{#if @last}}{{else}}, {{/if}} {{/resourceDefinition.httpLibraries}} } from '@angular/http';
+
+{{#each resourceDefinition.refs}}
+import {{this}} from '../models/{{this}}';
+{{/each}}
+
+import { ClientResponse, toClientResponse } from './utils/index';
+
+/**
+ * {{resourceName}}
+ *
+ */
+@Injectable()
+class {{resourceName}}{
+
+  constructor(private http: Http){}
+
+{{#each resourceDefinition.methods}}
+  /**
+  * {{operationId}}
+  * {{summary}}
+  */
+  {{operationId}}({{#parameters~}}{{codeName}}:{{type}}, {{/parameters}}options: RequestOptionsArgs){
+      // endpoint URL {{#if hasPathParameters }} with parameters{{/if}}
+      const methodPath = `{{path}}`;
+
+      {{#if hasQueryParameters }}
+      // query parameters
+      const queryParams = new URLSearchParams();
+      {{#groupedParameters.query}}
+      queryParams.set('{{name}}',{{codeName}});
+      {{/groupedParameters.query}}
+      {{/if}}
+
+      {{#if hasBodyParameters }}
+      // body parameters
+      const bodyParams = {
+      {{#groupedParameters.body}}
+        "{{ name }}": {{codeName}}{{#if @last}}{{else}}, {{/if}}
+      {{/groupedParameters.body}}
+      };
+      {{/if}}
+
+      {{#if hasHeadersParameter}}
+      // headers parameters
+      const headers = new Headers();
+      {{#groupedParameters.headers}}
+      headers.set('{{name}}',{{codeName}});
+      {{/groupedParameters.headers}}
+
+      {{#if hasBodyParameters}}
+      this.http.{{methodName}}(methodPath, bodyParams, options)
+        .map(toClientResponse)
+
+
+      {{/if}}
+      {{/if}}
+
+  }
+{{/each}}
+}

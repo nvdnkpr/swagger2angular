@@ -1,0 +1,2600 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "Recogizer User Authentication, which authenticates users for the portal and other services",
+    "version": "0.0.1",
+    "title": "Recogizer User Authentication",
+    "termsOfService": "http://www.recogizer.com/",
+    "contact": {},
+    "license": {
+      "name": "Copyright (C) Recogizer Group GmbH, Inc - All Rights Reserved",
+      "url": "http://www.recogizer.com/"
+    }
+  },
+  "host": "127.0.0.1:21122",
+  "basePath": "/api/v1",
+  "tags": [
+    {
+      "name": "organizations-resource",
+      "description": "Organizations Resource"
+    },
+    {
+      "name": "token-key-endpoint",
+      "description": "Token Key Endpoint"
+    },
+    {
+      "name": "users-resource",
+      "description": "Users Resource"
+    },
+    {
+      "name": "authorization-endpoint",
+      "description": "Authorization Endpoint"
+    },
+    {
+      "name": "client-details-resource",
+      "description": "Client Details Resource"
+    },
+    {
+      "name": "credentials-resource",
+      "description": "Credentials Resource"
+    },
+    {
+      "name": "check-token-endpoint",
+      "description": "Check Token Endpoint"
+    },
+    {
+      "name": "whitelabel-error-endpoint",
+      "description": "Whitelabel Error Endpoint"
+    },
+    {
+      "name": "token-endpoint",
+      "description": "Token Endpoint"
+    },
+    {
+      "name": "whitelabel-approval-endpoint",
+      "description": "Whitelabel Approval Endpoint"
+    }
+  ],
+  "paths": {
+    "/clientdetails/": {
+      "get": {
+        "tags": ["client-details-resource"],
+        "summary": "getAllClientDetails",
+        "operationId": "getAllClientDetailsUsingGET",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/ClientDetails"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "post": {
+        "tags": ["client-details-resource"],
+        "summary": "createClientDetails",
+        "operationId": "createClientDetailsUsingPOST",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "newClientDetails",
+            "description": "newClientDetails",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ClientDetailsParam"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/clientdetails/{uuid}": {
+      "get": {
+        "tags": ["client-details-resource"],
+        "summary": "getClientDetailsByUuid",
+        "operationId": "getClientDetailsByUuidUsingGET",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "uuid",
+            "in": "path",
+            "description": "uuid",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/ClientDetails"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["client-details-resource"],
+        "summary": "deleteClientDetails",
+        "operationId": "deleteClientDetailsUsingDELETE",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "uuid",
+            "in": "path",
+            "description": "uuid",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      },
+      "patch": {
+        "tags": ["client-details-resource"],
+        "summary": "updateClientDetails",
+        "operationId": "updateClientDetailsUsingPATCH",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "uuid",
+            "in": "path",
+            "description": "uuid",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "updateClientDetails",
+            "description": "updateClientDetails",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ClientDetailsParam"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      }
+    },
+    "/oauth/authorize": {
+      "get": {
+        "tags": ["authorization-endpoint"],
+        "summary": "authorize",
+        "operationId": "authorizeUsingGET",
+        "consumes": ["application/json"],
+        "produces": ["*/*"],
+        "parameters": [
+          {
+            "name": "model",
+            "in": "query",
+            "description": "model",
+            "required": false,
+            "type": "object"
+          },
+          {
+            "name": "parameters",
+            "in": "query",
+            "description": "parameters",
+            "required": true,
+            "items": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/ModelAndView"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "head": {
+        "tags": ["authorization-endpoint"],
+        "summary": "authorize",
+        "operationId": "authorizeUsingHEAD",
+        "consumes": ["application/json"],
+        "produces": ["*/*"],
+        "parameters": [
+          {
+            "name": "model",
+            "in": "query",
+            "description": "model",
+            "required": false,
+            "type": "object"
+          },
+          {
+            "name": "parameters",
+            "in": "query",
+            "description": "parameters",
+            "required": true,
+            "items": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/ModelAndView"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      },
+      "post": {
+        "tags": ["authorization-endpoint"],
+        "summary": "approveOrDeny",
+        "operationId": "approveOrDenyUsingPOST",
+        "consumes": ["application/json"],
+        "produces": ["*/*"],
+        "parameters": [
+          {
+            "name": "approvalParameters",
+            "in": "query",
+            "description": "approvalParameters",
+            "required": true,
+            "items": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "model",
+            "in": "query",
+            "description": "model",
+            "required": false,
+            "type": "object"
+          },
+          {
+            "name": "user_oauth_approval",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/View"
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "put": {
+        "tags": ["authorization-endpoint"],
+        "summary": "authorize",
+        "operationId": "authorizeUsingPUT",
+        "consumes": ["application/json"],
+        "produces": ["*/*"],
+        "parameters": [
+          {
+            "name": "model",
+            "in": "query",
+            "description": "model",
+            "required": false,
+            "type": "object"
+          },
+          {
+            "name": "parameters",
+            "in": "query",
+            "description": "parameters",
+            "required": true,
+            "items": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/ModelAndView"
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["authorization-endpoint"],
+        "summary": "authorize",
+        "operationId": "authorizeUsingDELETE",
+        "consumes": ["application/json"],
+        "produces": ["*/*"],
+        "parameters": [
+          {
+            "name": "model",
+            "in": "query",
+            "description": "model",
+            "required": false,
+            "type": "object"
+          },
+          {
+            "name": "parameters",
+            "in": "query",
+            "description": "parameters",
+            "required": true,
+            "items": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/ModelAndView"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      },
+      "options": {
+        "tags": ["authorization-endpoint"],
+        "summary": "authorize",
+        "operationId": "authorizeUsingOPTIONS",
+        "consumes": ["application/json"],
+        "produces": ["*/*"],
+        "parameters": [
+          {
+            "name": "model",
+            "in": "query",
+            "description": "model",
+            "required": false,
+            "type": "object"
+          },
+          {
+            "name": "parameters",
+            "in": "query",
+            "description": "parameters",
+            "required": true,
+            "items": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/ModelAndView"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      },
+      "patch": {
+        "tags": ["authorization-endpoint"],
+        "summary": "authorize",
+        "operationId": "authorizeUsingPATCH",
+        "consumes": ["application/json"],
+        "produces": ["*/*"],
+        "parameters": [
+          {
+            "name": "model",
+            "in": "query",
+            "description": "model",
+            "required": false,
+            "type": "object"
+          },
+          {
+            "name": "parameters",
+            "in": "query",
+            "description": "parameters",
+            "required": true,
+            "items": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/ModelAndView"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      }
+    },
+    "/oauth/check_token": {
+      "get": {
+        "tags": ["check-token-endpoint"],
+        "summary": "checkToken",
+        "operationId": "checkTokenUsingGET",
+        "consumes": ["application/json"],
+        "produces": ["*/*"],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "query",
+            "description": "token",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "head": {
+        "tags": ["check-token-endpoint"],
+        "summary": "checkToken",
+        "operationId": "checkTokenUsingHEAD",
+        "consumes": ["application/json"],
+        "produces": ["*/*"],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "query",
+            "description": "token",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      },
+      "post": {
+        "tags": ["check-token-endpoint"],
+        "summary": "checkToken",
+        "operationId": "checkTokenUsingPOST",
+        "consumes": ["application/json"],
+        "produces": ["*/*"],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "query",
+            "description": "token",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "put": {
+        "tags": ["check-token-endpoint"],
+        "summary": "checkToken",
+        "operationId": "checkTokenUsingPUT",
+        "consumes": ["application/json"],
+        "produces": ["*/*"],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "query",
+            "description": "token",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["check-token-endpoint"],
+        "summary": "checkToken",
+        "operationId": "checkTokenUsingDELETE",
+        "consumes": ["application/json"],
+        "produces": ["*/*"],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "query",
+            "description": "token",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      },
+      "options": {
+        "tags": ["check-token-endpoint"],
+        "summary": "checkToken",
+        "operationId": "checkTokenUsingOPTIONS",
+        "consumes": ["application/json"],
+        "produces": ["*/*"],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "query",
+            "description": "token",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      },
+      "patch": {
+        "tags": ["check-token-endpoint"],
+        "summary": "checkToken",
+        "operationId": "checkTokenUsingPATCH",
+        "consumes": ["application/json"],
+        "produces": ["*/*"],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "query",
+            "description": "token",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      }
+    },
+    "/oauth/confirm_access": {
+      "get": {
+        "tags": ["whitelabel-approval-endpoint"],
+        "summary": "getAccessConfirmation",
+        "operationId": "getAccessConfirmationUsingGET",
+        "consumes": ["application/json"],
+        "produces": ["*/*"],
+        "parameters": [
+          {
+            "name": "model",
+            "in": "query",
+            "description": "model",
+            "required": false,
+            "type": "object"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/ModelAndView"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "head": {
+        "tags": ["whitelabel-approval-endpoint"],
+        "summary": "getAccessConfirmation",
+        "operationId": "getAccessConfirmationUsingHEAD",
+        "consumes": ["application/json"],
+        "produces": ["*/*"],
+        "parameters": [
+          {
+            "name": "model",
+            "in": "query",
+            "description": "model",
+            "required": false,
+            "type": "object"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/ModelAndView"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      },
+      "post": {
+        "tags": ["whitelabel-approval-endpoint"],
+        "summary": "getAccessConfirmation",
+        "operationId": "getAccessConfirmationUsingPOST",
+        "consumes": ["application/json"],
+        "produces": ["*/*"],
+        "parameters": [
+          {
+            "name": "model",
+            "in": "query",
+            "description": "model",
+            "required": false,
+            "type": "object"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/ModelAndView"
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "put": {
+        "tags": ["whitelabel-approval-endpoint"],
+        "summary": "getAccessConfirmation",
+        "operationId": "getAccessConfirmationUsingPUT",
+        "consumes": ["application/json"],
+        "produces": ["*/*"],
+        "parameters": [
+          {
+            "name": "model",
+            "in": "query",
+            "description": "model",
+            "required": false,
+            "type": "object"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/ModelAndView"
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["whitelabel-approval-endpoint"],
+        "summary": "getAccessConfirmation",
+        "operationId": "getAccessConfirmationUsingDELETE",
+        "consumes": ["application/json"],
+        "produces": ["*/*"],
+        "parameters": [
+          {
+            "name": "model",
+            "in": "query",
+            "description": "model",
+            "required": false,
+            "type": "object"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/ModelAndView"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      },
+      "options": {
+        "tags": ["whitelabel-approval-endpoint"],
+        "summary": "getAccessConfirmation",
+        "operationId": "getAccessConfirmationUsingOPTIONS",
+        "consumes": ["application/json"],
+        "produces": ["*/*"],
+        "parameters": [
+          {
+            "name": "model",
+            "in": "query",
+            "description": "model",
+            "required": false,
+            "type": "object"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/ModelAndView"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      },
+      "patch": {
+        "tags": ["whitelabel-approval-endpoint"],
+        "summary": "getAccessConfirmation",
+        "operationId": "getAccessConfirmationUsingPATCH",
+        "consumes": ["application/json"],
+        "produces": ["*/*"],
+        "parameters": [
+          {
+            "name": "model",
+            "in": "query",
+            "description": "model",
+            "required": false,
+            "type": "object"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/ModelAndView"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      }
+    },
+    "/oauth/error": {
+      "get": {
+        "tags": ["whitelabel-error-endpoint"],
+        "summary": "handleError",
+        "operationId": "handleErrorUsingGET",
+        "consumes": ["application/json"],
+        "produces": ["*/*"],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/ModelAndView"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "head": {
+        "tags": ["whitelabel-error-endpoint"],
+        "summary": "handleError",
+        "operationId": "handleErrorUsingHEAD",
+        "consumes": ["application/json"],
+        "produces": ["*/*"],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/ModelAndView"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      },
+      "post": {
+        "tags": ["whitelabel-error-endpoint"],
+        "summary": "handleError",
+        "operationId": "handleErrorUsingPOST",
+        "consumes": ["application/json"],
+        "produces": ["*/*"],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/ModelAndView"
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "put": {
+        "tags": ["whitelabel-error-endpoint"],
+        "summary": "handleError",
+        "operationId": "handleErrorUsingPUT",
+        "consumes": ["application/json"],
+        "produces": ["*/*"],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/ModelAndView"
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["whitelabel-error-endpoint"],
+        "summary": "handleError",
+        "operationId": "handleErrorUsingDELETE",
+        "consumes": ["application/json"],
+        "produces": ["*/*"],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/ModelAndView"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      },
+      "options": {
+        "tags": ["whitelabel-error-endpoint"],
+        "summary": "handleError",
+        "operationId": "handleErrorUsingOPTIONS",
+        "consumes": ["application/json"],
+        "produces": ["*/*"],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/ModelAndView"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      },
+      "patch": {
+        "tags": ["whitelabel-error-endpoint"],
+        "summary": "handleError",
+        "operationId": "handleErrorUsingPATCH",
+        "consumes": ["application/json"],
+        "produces": ["*/*"],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/ModelAndView"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      }
+    },
+    "/oauth/token": {
+      "get": {
+        "tags": ["token-endpoint"],
+        "summary": "getAccessToken",
+        "operationId": "getAccessTokenUsingGET",
+        "consumes": ["application/json"],
+        "produces": ["*/*"],
+        "parameters": [
+          {
+            "name": "parameters",
+            "in": "query",
+            "description": "parameters",
+            "required": true,
+            "items": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/OAuth2AccessToken"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "post": {
+        "tags": ["token-endpoint"],
+        "summary": "postAccessToken",
+        "operationId": "postAccessTokenUsingPOST",
+        "consumes": ["application/json"],
+        "produces": ["*/*"],
+        "parameters": [
+          {
+            "name": "parameters",
+            "in": "query",
+            "description": "parameters",
+            "required": true,
+            "items": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/OAuth2AccessToken"
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/oauth/token_key": {
+      "get": {
+        "tags": ["token-key-endpoint"],
+        "summary": "getKey",
+        "operationId": "getKeyUsingGET",
+        "consumes": ["application/json"],
+        "produces": ["*/*"],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/organizations/": {
+      "get": {
+        "tags": ["organizations-resource"],
+        "summary": "getAllOrganizations",
+        "operationId": "getAllOrganizationsUsingGET",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Organization"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "post": {
+        "tags": ["organizations-resource"],
+        "summary": "createOrganization",
+        "operationId": "createOrganizationUsingPOST",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "newOrganization",
+            "description": "newOrganization",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/OrganizationParam"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/organizations/tree/{organizationId}": {
+      "get": {
+        "tags": ["organizations-resource"],
+        "summary": "getOrganizationByOrganizationId",
+        "operationId": "getOrganizationByOrganizationIdUsingGET",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "organizationId",
+            "in": "path",
+            "description": "organizationId",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/OrganizationTreeValue"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/organizations/{uuid}": {
+      "get": {
+        "tags": ["organizations-resource"],
+        "summary": "getOrganizationByUuid",
+        "operationId": "getOrganizationByUuidUsingGET",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "uuid",
+            "in": "path",
+            "description": "uuid",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Organization"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["organizations-resource"],
+        "summary": "deleteOrganization",
+        "operationId": "deleteOrganizationUsingDELETE",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "uuid",
+            "in": "path",
+            "description": "uuid",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      },
+      "patch": {
+        "tags": ["organizations-resource"],
+        "summary": "updateOrganization",
+        "operationId": "updateOrganizationUsingPATCH",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "uuid",
+            "in": "path",
+            "description": "uuid",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "updateOrganization",
+            "description": "updateOrganization",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/OrganizationParam"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      }
+    },
+    "/organizations/{uuid}/children/users": {
+      "get": {
+        "tags": ["organizations-resource"],
+        "summary": "getUsersByOrganizationAndChildOrganizations",
+        "operationId": "getUsersByOrganizationAndChildOrganizationsUsingGET",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "uuid",
+            "in": "path",
+            "description": "uuid",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/User"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/organizations/{uuid}/users": {
+      "get": {
+        "tags": ["organizations-resource"],
+        "summary": "getUsersByOrganization",
+        "operationId": "getUsersByOrganizationUsingGET",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "uuid",
+            "in": "path",
+            "description": "uuid",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/User"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/users/": {
+      "get": {
+        "tags": ["users-resource"],
+        "summary": "getAllUsers",
+        "operationId": "getAllUsersUsingGET",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/User"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "post": {
+        "tags": ["users-resource"],
+        "summary": "createUser",
+        "operationId": "createUserUsingPOST",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "newUser",
+            "description": "newUser",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UserParam"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/users/me": {
+      "get": {
+        "tags": ["users-resource"],
+        "summary": "getCurrentUser",
+        "operationId": "getCurrentUserUsingGET",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/users/me/language": {
+      "patch": {
+        "tags": ["users-resource"],
+        "summary": "setLanguage",
+        "operationId": "setLanguageUsingPATCH",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "language",
+            "in": "path",
+            "description": "language",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      }
+    },
+    "/users/{uuid}": {
+      "get": {
+        "tags": ["users-resource"],
+        "summary": "getUserByUuid",
+        "operationId": "getUserByUuidUsingGET",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "uuid",
+            "in": "path",
+            "description": "uuid",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["users-resource"],
+        "summary": "deleteUser",
+        "operationId": "deleteUserUsingDELETE",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "uuid",
+            "in": "path",
+            "description": "uuid",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      },
+      "patch": {
+        "tags": ["users-resource"],
+        "summary": "updateUser",
+        "operationId": "updateUserUsingPATCH",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "uuid",
+            "in": "path",
+            "description": "uuid",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "updateUser",
+            "description": "updateUser",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UserParam"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      }
+    },
+    "/users/{uuid}/credentials/activate": {
+      "post": {
+        "tags": ["credentials-resource"],
+        "summary": "activateUser",
+        "operationId": "activateUserUsingPOST",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "uuid",
+            "in": "path",
+            "description": "uuid",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "credentialsParam",
+            "description": "credentialsParam",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CredentialsParam"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/users/{uuid}/credentials/password": {
+      "patch": {
+        "tags": ["credentials-resource"],
+        "summary": "updatePassword",
+        "operationId": "updatePasswordUsingPATCH",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "uuid",
+            "in": "path",
+            "description": "uuid",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "passwordParam",
+            "description": "passwordParam",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CredentialsParam"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      }
+    },
+    "/users/{uuid}/credentials/password/reset": {
+      "get": {
+        "tags": ["credentials-resource"],
+        "summary": "requirePasswordReset",
+        "operationId": "requirePasswordResetUsingGET",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "uuid",
+            "in": "path",
+            "description": "uuid",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "patch": {
+        "tags": ["credentials-resource"],
+        "summary": "resetPassword",
+        "operationId": "resetPasswordUsingPATCH",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "uuid",
+            "in": "path",
+            "description": "uuid",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "passwordParam",
+            "description": "passwordParam",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CredentialsParam"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      }
+    },
+    "/users/{uuid}/credentials/username": {
+      "patch": {
+        "tags": ["credentials-resource"],
+        "summary": "updateUsername",
+        "operationId": "updateUsernameUsingPATCH",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "uuid",
+            "in": "path",
+            "description": "uuid",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "usernameParam",
+            "description": "usernameParam",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CredentialsParam"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      }
+    },
+    "/users/{uuid}/disable": {
+      "patch": {
+        "tags": ["users-resource"],
+        "summary": "disableUser",
+        "operationId": "disableUserUsingPATCH",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "uuid",
+            "in": "path",
+            "description": "uuid",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      }
+    },
+    "/users/{uuid}/enable": {
+      "patch": {
+        "tags": ["users-resource"],
+        "summary": "enableUser",
+        "operationId": "enableUserUsingPATCH",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "uuid",
+            "in": "path",
+            "description": "uuid",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      }
+    },
+    "/users/{uuid}/role/{role}": {
+      "delete": {
+        "tags": ["users-resource"],
+        "summary": "deleteRoleFromUser",
+        "operationId": "deleteRoleFromUserUsingDELETE",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "uuid",
+            "in": "path",
+            "description": "uuid",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "role",
+            "in": "path",
+            "description": "role",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      },
+      "patch": {
+        "tags": ["users-resource"],
+        "summary": "addRoleToUser",
+        "operationId": "addRoleToUserUsingPATCH",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "uuid",
+            "in": "path",
+            "description": "uuid",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "role",
+            "in": "path",
+            "description": "role",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "ClientDetailsParam": {
+      "type": "object",
+      "properties": {
+        "accessTokenValidity": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "additionalInformation": {
+          "type": "string"
+        },
+        "authorities": {
+          "type": "string"
+        },
+        "authorizedGrantTypes": {
+          "type": "string"
+        },
+        "clientId": {
+          "type": "string"
+        },
+        "clientSecret": {
+          "type": "string"
+        },
+        "organizationUuid": {
+          "type": "string"
+        },
+        "refreshTokenValidity": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "resourceIds": {
+          "type": "string"
+        },
+        "scopes": {
+          "type": "string"
+        },
+        "webServerRedirectUri": {
+          "type": "string"
+        }
+      }
+    },
+    "Organization": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "organizationId": {
+          "type": "string"
+        },
+        "parentOrganization": {
+          "$ref": "#/definitions/Organization"
+        },
+        "type": {
+          "type": "string",
+          "enum": ["RECO", "PARTNER", "CUSTOMER"]
+        },
+        "uuid": {
+          "type": "string"
+        }
+      }
+    },
+    "User": {
+      "type": "object",
+      "properties": {
+        "accountNonExpired": {
+          "type": "boolean"
+        },
+        "accountNonLocked": {
+          "type": "boolean"
+        },
+        "credentialsNonExpired": {
+          "type": "boolean"
+        },
+        "email": {
+          "type": "string"
+        },
+        "enabled": {
+          "type": "boolean"
+        },
+        "failedLoginAttempts": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "familyName": {
+          "type": "string"
+        },
+        "givenName": {
+          "type": "string"
+        },
+        "language": {
+          "type": "string"
+        },
+        "locked": {
+          "type": "boolean"
+        },
+        "organization": {
+          "$ref": "#/definitions/Organization"
+        },
+        "phoneNumber": {
+          "type": "string"
+        },
+        "roles": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "uuid": {
+          "type": "string"
+        }
+      }
+    },
+    "OAuth2RefreshToken": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": "string"
+        }
+      }
+    },
+    "GrantedAuthority": {
+      "type": "object",
+      "properties": {
+        "authority": {
+          "type": "string"
+        }
+      }
+    },
+    "ModelAndView": {
+      "type": "object",
+      "properties": {
+        "empty": {
+          "type": "boolean"
+        },
+        "model": {
+          "type": "object"
+        },
+        "modelMap": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object"
+          }
+        },
+        "reference": {
+          "type": "boolean"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "100",
+            "101",
+            "102",
+            "103",
+            "200",
+            "201",
+            "202",
+            "203",
+            "204",
+            "205",
+            "206",
+            "207",
+            "208",
+            "226",
+            "300",
+            "301",
+            "302",
+            "303",
+            "304",
+            "305",
+            "307",
+            "308",
+            "400",
+            "401",
+            "402",
+            "403",
+            "404",
+            "405",
+            "406",
+            "407",
+            "408",
+            "409",
+            "410",
+            "411",
+            "412",
+            "413",
+            "414",
+            "415",
+            "416",
+            "417",
+            "418",
+            "419",
+            "420",
+            "421",
+            "422",
+            "423",
+            "424",
+            "426",
+            "428",
+            "429",
+            "431",
+            "451",
+            "500",
+            "501",
+            "502",
+            "503",
+            "504",
+            "505",
+            "506",
+            "507",
+            "508",
+            "509",
+            "510",
+            "511"
+          ]
+        },
+        "view": {
+          "$ref": "#/definitions/View"
+        },
+        "viewName": {
+          "type": "string"
+        }
+      }
+    },
+    "OrganizationTreeValue": {
+      "type": "object",
+      "properties": {
+        "childOrganizations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/OrganizationTreeValue"
+          }
+        },
+        "name": {
+          "type": "string"
+        },
+        "uuid": {
+          "type": "string"
+        }
+      }
+    },
+    "View": {
+      "type": "object",
+      "properties": {
+        "contentType": {
+          "type": "string"
+        }
+      }
+    },
+    "CollectionOfGrantedAuthority": {
+      "type": "object"
+    },
+    "UserParam": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "familyName": {
+          "type": "string"
+        },
+        "givenName": {
+          "type": "string"
+        },
+        "language": {
+          "type": "string"
+        },
+        "organizationUuid": {
+          "type": "string"
+        },
+        "phoneNumber": {
+          "type": "string"
+        },
+        "roles": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "ClientDetails": {
+      "type": "object",
+      "properties": {
+        "accessTokenValidity": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "accessTokenValiditySeconds": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "additionalInformation": {
+          "type": "object"
+        },
+        "authorities": {
+          "$ref": "#/definitions/CollectionOfGrantedAuthority"
+        },
+        "authorizedGrantTypes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "clientId": {
+          "type": "string"
+        },
+        "organization": {
+          "$ref": "#/definitions/Organization"
+        },
+        "refreshTokenValidity": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "refreshTokenValiditySeconds": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "registeredRedirectUri": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "resourceIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "scope": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "scoped": {
+          "type": "boolean"
+        },
+        "scopes": {
+          "type": "string"
+        },
+        "secretRequired": {
+          "type": "boolean"
+        },
+        "uuid": {
+          "type": "string"
+        },
+        "webServerRedirectUri": {
+          "type": "string"
+        }
+      }
+    },
+    "OAuth2AccessToken": {
+      "type": "object",
+      "properties": {
+        "additionalInformation": {
+          "type": "object"
+        },
+        "expiration": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "expired": {
+          "type": "boolean"
+        },
+        "expiresIn": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "refreshToken": {
+          "$ref": "#/definitions/OAuth2RefreshToken"
+        },
+        "scope": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "tokenType": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string"
+        }
+      }
+    },
+    "CredentialsParam": {
+      "type": "object",
+      "properties": {
+        "password": {
+          "type": "string"
+        },
+        "token": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string"
+        }
+      }
+    },
+    "OrganizationParam": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "organizationId": {
+          "type": "string"
+        },
+        "parentUuid": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
