@@ -1,6 +1,6 @@
 {
   "name": "swagger2angular",
-  "version": "0.0.15",
+  "version": "0.1.0",
   "description": "Create Angular API Client from swagger json",
   "homepage": "https://github.com/nvdnkpr/swagger2angular",
   "main": "index.js",
@@ -25,7 +25,7 @@
     "api",
     "generator"
   ],
-  "license": "APACHE",
+  "license": "MIT",
   "scripts": {
     "swagger2angular": "ts-node ./src/bin/swagger2angular",
     "build": "gulp"
