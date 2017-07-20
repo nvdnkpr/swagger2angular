@@ -304,28 +304,46 @@ export class Generator {
       })
       .each((methodSpec) => {
         methodSpec.responses = _
-          .chain(methodSpec.responses)
-          // resolve response
-          .each((response) => {
-            if (response.schema) {
-              if (response.schema.$ref) {
-                methodSpec.refs.push(Generator.refResolver(response.schema.$ref));
-                response = _.assign(response, {type: Generator.refResolver(response.schema.$ref), isArray: false});
-              }
-              else if (response.schema.type === 'array') {
-                methodSpec.refs.push(Generator.refResolver(response.schema.items.$ref));
-                response = _.assign(response, {type: Generator.refResolver(response.schema.items.$ref), isArray: true});
-              }
-              else {
-                response = _.assign(response, {type: response.schema.type, isArray: false});
-              }
-              delete response['schema'];
+        .chain(methodSpec.responses)
+        // resolve response
+        .each((response, httpCode) => {
+          const code = parseInt(httpCode,10);
+          const responseTypes = [];
+          if (response.schema) {
+            let resolvedRef;
+            if (response.schema.$ref) {
+              resolvedRef = Generator.refResolver(response.schema.$ref)
+              methodSpec.refs.push(resolvedRef);
+              response = _.assign(response, {type: resolvedRef, isArray: false});
+              { responseTypes.push(resolvedRef);}
+            }
+            else if (response.schema.type === 'array') {
+              resolvedRef = Generator.refResolver(response.schema.items.$ref)
+              methodSpec.refs.push(resolvedRef);
+              response = _.assign(response, {type: resolvedRef, isArray: true});
+              if (code >= 200 && code < 300){ responseTypes.push(resolvedRef);}
             }
             else {
-              response = _.assign(response, {type: 'string', isArray: false});
+              resolvedRef = response.schema.type
+              response = _.assign(response, {type: resolvedRef, isArray: false});
+              if (code >= 200 && code < 300){ responseTypes.push(resolvedRef);}
             }
-          })
-          .value();
+            delete response['schema'];
+          }
+          else {
+            response = _.assign(response, {type: 'string', isArray: false});
+            if (code >= 200 && code < 300){
+              responseTypes.push('string');
+            } else {
+              responseTypes.push('Error');
+            }
+          }
+
+          methodSpec.responseTypes = responseTypes.join('|');
+        })
+        .value();
+
+
       })
       .groupBy((methodSpec) => methodSpec.resource)
       .each((methodSpecGroup, resourceName) => _.each(methodSpecGroup, (methodSpec) => delete methodSpec['resource']))
@@ -341,7 +359,6 @@ export class Generator {
         httpLibraries: libraries
       };
     });
-    console.log(inspect(resources, {depth: null}));
 
     return returnResources;
   };
