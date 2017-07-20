@@ -47,6 +47,9 @@
     "@types/swagger-schema-official": "^2.0.5",
     "del": "^3.0.0",
     "gulp": "^3.9.1",
+    "gulp-beautify": "^2.0.1",
+    "gulp-debug": "^3.1.0",
+    "gulp-json-transform": "^0.4.2",
     "gulp-typescript": "^3.2.1",
     "tslint": "^5.5.0",
     "typescript": "^2.4.1"
