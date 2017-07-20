@@ -4,6 +4,9 @@
   "description": "Create Angular API Client from swagger json",
   "homepage": "https://github.com/nvdnkpr/swagger2angular",
   "main": "index.js",
+  "bin": {
+    "swagger2angular": "./bin/swagger2angular.js"
+  },
   "author": {
     "name": "Navid Nikpour",
     "email": "navid@nikpour.com"
