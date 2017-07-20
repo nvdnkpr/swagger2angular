@@ -26,7 +26,6 @@ const optimist = require('optimist')
   .alias('b', 'buildConfig').describe('b', 'Path to your swagger2angular configuration file.');
 
 const argv = optimist.argv;
-console.log(argv);
 
 function stderr(err) {
   console.log('Error: ' + err);
