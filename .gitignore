@@ -57,5 +57,9 @@ typings/
 # dotenv environment variables file
 .env
 
-# IDEA
-.idea
+# IDEA settings
+.idea/
+
+# dist folder and subfolders
+dist/
+
