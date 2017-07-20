@@ -71,6 +71,11 @@ const generator = new Generator(config);
 const outputPath = path.join(process.cwd(), generator.getOutputPath());
 if (!fs.existsSync(outputPath)) {fs.mkdirSync(outputPath); }
 
+fs.writeFileSync(path.join(outputPath,'index.ts'),`
+export * from './models';
+export * from './resources';
+`);
+
 // create util file
 const utilsPath = path.join(outputPath, 'utils');
 if (!fs.existsSync(utilsPath)) { fs.mkdirSync(utilsPath); }
@@ -98,6 +103,7 @@ const barrelRenderer = Generator.templateCompiler(`
 export * from './{{this}}';
 {{/each}}
 `);
+
 
 // create models and model barrel
 const modelsPath = path.join(outputPath, 'models');
