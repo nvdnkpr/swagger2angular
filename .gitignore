@@ -62,4 +62,5 @@ typings/
 
 # dist folder and subfolders
 dist/
+client/
 
