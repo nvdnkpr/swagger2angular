@@ -1,10 +1,11 @@
+import { Injectable } from '@angular/core';
 import { {{#resourceDefinition.httpLibraries}}{{this}}{{#if @last}}{{else}}, {{/if}} {{/resourceDefinition.httpLibraries}} } from '@angular/http';
 
 {{#each resourceDefinition.refs}}
 import {{this}} from '../models/{{this}}';
 {{/each}}
 
-import { ClientResponse, toClientResponse } from './utils/index';
+import { ClientResponse, toClientResponse } from '../utils';
 
 /**
  * {{resourceName}}
@@ -20,7 +21,7 @@ class {{resourceName}}{
   * {{operationId}}
   * {{summary}}
   */
-  {{operationId}}({{#parameters~}}{{codeName}}:{{type}}, {{/parameters}}options: RequestOptionsArgs){
+  {{operationId}}({{parantheseString}}options: RequestOptionsArgs)Observable<ClientResponse<{{responseTypeString}}>>{
       // endpoint URL {{#if hasPathParameters }} with parameters{{/if}}
       const methodPath = `{{path}}`;
 
@@ -47,15 +48,12 @@ class {{resourceName}}{
       {{#groupedParameters.headers}}
       headers.set('{{name}}',{{codeName}});
       {{/groupedParameters.headers}}
+      {{/if}}
 
       {{#if hasBodyParameters}}
       this.http.{{methodName}}(methodPath, bodyParams, options)
         .map(toClientResponse)
-
-
       {{/if}}
-      {{/if}}
-
   }
 {{/each}}
 }
