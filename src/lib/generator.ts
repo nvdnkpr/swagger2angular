@@ -300,6 +300,10 @@ export class Generator {
 
         methodSpec.hasFormParameters = !!(methodSpec.groupedParameters.formData && methodSpec.groupedParameters.formData.length > 0) ? true : false;
 
+        methodSpec.parantheseString = methodSpec.parameters.map((parameter) => `${parameter.codeName}:${parameter.type},`).join('');
+
+
+
         return methodSpec;
       })
       .each((methodSpec) => {
@@ -312,16 +316,16 @@ export class Generator {
           if (response.schema) {
             let resolvedRef;
             if (response.schema.$ref) {
-              resolvedRef = Generator.refResolver(response.schema.$ref)
+              resolvedRef = Generator.refResolver(response.schema.$ref);
               methodSpec.refs.push(resolvedRef);
               response = _.assign(response, {type: resolvedRef, isArray: false});
               { responseTypes.push(resolvedRef);}
             }
             else if (response.schema.type === 'array') {
-              resolvedRef = Generator.refResolver(response.schema.items.$ref)
+              resolvedRef = Generator.refResolver(response.schema.items.$ref);
               methodSpec.refs.push(resolvedRef);
               response = _.assign(response, {type: resolvedRef, isArray: true});
-              if (code >= 200 && code < 300){ responseTypes.push(resolvedRef);}
+              if (code >= 200 && code < 300){ responseTypes.push(resolvedRef+"[]");}
             }
             else {
               resolvedRef = response.schema.type
@@ -339,7 +343,7 @@ export class Generator {
             }
           }
 
-          methodSpec.responseTypes = responseTypes.join('|');
+          methodSpec.responseTypeString = responseTypes.join('|');
         })
         .value();
 
