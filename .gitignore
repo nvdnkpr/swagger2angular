@@ -61,6 +61,6 @@ typings/
 .idea/
 
 # dist folder and subfolders
-dist/
-client/
+dist/**
+client/**
 
