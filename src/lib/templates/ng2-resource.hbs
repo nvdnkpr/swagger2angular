@@ -1,5 +1,8 @@
-import { Injectable } from '@angular/core';
-import { {{#resourceDefinition.httpLibraries}}{{this}}{{#if @last}}{{else}}, {{/if}} {{/resourceDefinition.httpLibraries}} } from '@angular/http';
+import { Injectable, Inject, InjectionToken } from '@angular/core';
+import { {{#resourceDefinition.httpLibraries}}{{this}},{{/resourceDefinition.httpLibraries}} RequestOptionsArgs } from '@angular/http';
+
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/map';
 
 {{#each resourceDefinition.refs}}
 import {{this}} from '../models/{{this}}';
@@ -7,25 +10,35 @@ import {{this}} from '../models/{{this}}';
 
 import { ClientResponse, toClientResponse } from '../utils';
 
+export let {{service.tokenName}}_CONFIG = new InjectionToken<{{service.interfaceName}}Config>('{{service.interfaceName}}');
+
+export interface {{service.interfaceName}}Config{
+  host: string;
+}
+
+
 /**
  * {{resourceName}}
  *
  */
 @Injectable()
 class {{resourceName}}{
+  config: {{service.interfaceName}}Config;
 
-  constructor(private http: Http){}
+  constructor(private http: Http, @Inject({{service.tokenName}}_CONFIG) config: {{service.interfaceName}}Config){
+    this.config = config;
+  }
 
 {{#each resourceDefinition.methods}}
   /**
   * {{operationId}}
   * {{summary}}
   */
-  {{operationId}}({{parantheseString}}options: RequestOptionsArgs)Observable<ClientResponse<{{responseTypeString}}>>{
+  {{operationId}}({{parantheseString}}options: RequestOptionsArgs): Observable<ClientResponse<{{responseTypeString}}>>{
       // endpoint URL {{#if hasPathParameters }} with parameters{{/if}}
       const methodPath = `{{path}}`;
 
-      {{#if hasQueryParameters }}
+      {{#if has.queryParameters }}
       // query parameters
       const queryParams = new URLSearchParams();
       {{#groupedParameters.query}}
@@ -33,7 +46,7 @@ class {{resourceName}}{
       {{/groupedParameters.query}}
       {{/if}}
 
-      {{#if hasBodyParameters }}
+      {{#if has.bodyParameters }}
       // body parameters
       const bodyParams = {
       {{#groupedParameters.body}}
@@ -42,7 +55,7 @@ class {{resourceName}}{
       };
       {{/if}}
 
-      {{#if hasHeadersParameter}}
+      {{#if has.headersParameter}}
       // headers parameters
       const headers = new Headers();
       {{#groupedParameters.headers}}
@@ -50,9 +63,10 @@ class {{resourceName}}{
       {{/groupedParameters.headers}}
       {{/if}}
 
-      {{#if hasBodyParameters}}
-      this.http.{{methodName}}(methodPath, bodyParams, options)
-        .map(toClientResponse)
+      {{#if has.bodyParameters}}
+      return this.http.{{methodName}}(this.config.host+methodPath, bodyParams, options).map(toClientResponse);
+      {{else}}
+      return this.http.{{methodName}}(this.config.host+methodPath, options).map(toClientResponse);
       {{/if}}
   }
 {{/each}}

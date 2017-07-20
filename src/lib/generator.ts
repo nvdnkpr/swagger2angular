@@ -71,6 +71,10 @@ export class Generator {
   private _swaggerParserPromise: Promise<any>;
   private swaggerSpecFile: string;
   private swaggerSpec: Swagger;
+  private service: {
+    tokenName: string;
+    interfaceName: string;
+  };
 
   private host: string;
   private info: Info;
@@ -109,8 +113,10 @@ export class Generator {
     this._swaggerParserPromise = swaggerParse(options.swaggerSpecFile)
       .then((api: Swagger) => {
         this.swaggerSpec = api;
-        this.host = this.swaggerSpec.host;
-        this.info = this.swaggerSpec.info;
+        this.service = {
+          tokenName: _.snakeCase(api.info.title).toUpperCase(),
+          interfaceName: _.capitalize(_.camelCase(api.info.title))
+        };
         this.models = _.each(this.swaggerSpec.definitions, Generator.retrieveModels) as ModelType[];
         this.resources = Generator.retrieveResources(this.swaggerSpec.paths);
       })
@@ -131,11 +137,19 @@ export class Generator {
   }
 
   processResource(data: any) {
+    if (!data.swagger) {data = _.assign(data, {swagger: this.swaggerSpec}); }
+    if (!data.service) {data = _.assign(data, {service: this.service}); }
     return this.renderer.resource(data);
   }
 
   processModel(data: any) {
+    if (!data.swagger) {data = _.assign(data, {swagger: this.swaggerSpec}); }
+    if (!data.service) {data = _.assign(data, {service: this.service}); }
     return this.renderer.model(data);
+  }
+
+  getSpec(): Promise<Swagger>{
+    return this._swaggerParserPromise.then(() => this.swaggerSpec);
   }
 
   getModels(): Promise<any[]>{
@@ -144,14 +158,6 @@ export class Generator {
 
   getResources():Promise<any[]>{
     return this._swaggerParserPromise.then(()=> this.resources);
-  }
-
-  getInfo():Promise<Info>{
-    return this._swaggerParserPromise.then(() => this.info);
-  }
-
-  getHost():Promise<string>{
-    return this._swaggerParserPromise.then(()=>this.host);
   }
 
   getOutputPath(): string {
@@ -168,10 +174,6 @@ export class Generator {
 
   static refResolver(ref) {
     return ref.split('/').reverse()[0]
-  };
-
-  static swaggerInfo():any {
-
   };
 
   static retrieveModels(modelDefinition, modelName): any {
@@ -233,6 +235,8 @@ export class Generator {
   };
 
   static retrieveResources(paths: any): any {
+
+
     let resources = _
       .chain(paths)
       // push path and methodName into method spec
@@ -257,16 +261,19 @@ export class Generator {
       })
       // resolve reference to definition and group parameters in which object (query, path, body)
       .map((methodSpec) => {
-        methodSpec.refs = [];
-        methodSpec.parameters = _
-          .chain(methodSpec.parameters)
-          // resolve schema reference to definitions
+        methodSpec.refs = {parameters:[], responses:[]};
+        //
+        const parameterCodeName = (parameter) => {
+          return ['path', 'header'].indexOf(parameter.in) > -1 ? parameter.name : `${parameter.in[0].toLowerCase()}${_.capitalize(parameter.name)}`;
+        };
+
+
+        methodSpec.parameters = _.chain(methodSpec.parameters)
           .map((parameter) => {
-            parameter.codeName = ['path',
-                                  'header'].indexOf(parameter.in) > -1 ? parameter.name : `${parameter.in.toLowerCase()}${_.capitalize(parameter.name)}`;
+            parameter.codeName = parameterCodeName(parameter);
             if (parameter.schema && parameter.schema.$ref) {
               parameter.type = Generator.refResolver(parameter.schema.$ref);
-              methodSpec.refs.push(parameter.type);
+              methodSpec.refs.parameters.push(parameter.type);
               delete parameter['schema'];
             }
             else if (parameter.items && parameter.items.type) {
@@ -283,79 +290,76 @@ export class Generator {
 
         methodSpec.groupedParameters = _.groupBy(methodSpec.parameters, (parameter: any) => parameter.in);
 
+        methodSpec.has = {
+          pathParameters: !!(methodSpec.groupedParameters.path && methodSpec.groupedParameters.path.length > 0),
+          queryParameters: !!(methodSpec.groupedParameters.query && methodSpec.groupedParameters.query.length > 0),
+          bodyParameters: !!(methodSpec.groupedParameters.body && methodSpec.groupedParameters.body.length > 0),
+          headerParameters: !!(methodSpec.groupedParameters.header && methodSpec.groupedParameters.header.length > 0),
+          formParameters: !!(methodSpec.groupedParameters.formData && methodSpec.groupedParameters.formData.length > 0) ? true : false
+        };
+
+        // look which libraries we need
         methodSpec.httpLibraries = ['Http', 'Response'];
-        methodSpec.hasQueryParameters = !!(methodSpec.groupedParameters.query && methodSpec.groupedParameters.query.length > 0);
-        if (methodSpec.hasQueryParameters) {
-          methodSpec.httpLibraries.push('URLSearchParams');
-        }
+        if (methodSpec.has.queryParameters) { methodSpec.httpLibraries.push('URLSearchParams'); }
+        if (methodSpec.has.headerParameters) { methodSpec.httpLibraries.push('Headers'); }
 
-        methodSpec.hasBodyParameters = !!(methodSpec.groupedParameters.body && methodSpec.groupedParameters.body.length > 0);
-
-        methodSpec.hasPathParameters = !!(methodSpec.groupedParameters.path && methodSpec.groupedParameters.path.length > 0);
-
-        methodSpec.hasHeaderParameters = !!(methodSpec.groupedParameters.header && methodSpec.groupedParameters.header.length > 0);
-        if (methodSpec.hasHeaderParameters) {
-          methodSpec.httpLibraries.push('Headers');
-        }
-
-        methodSpec.hasFormParameters = !!(methodSpec.groupedParameters.formData && methodSpec.groupedParameters.formData.length > 0) ? true : false;
-
-        methodSpec.parantheseString = methodSpec.parameters.map((parameter) => `${parameter.codeName}:${parameter.type},`).join('');
-
-
+        // simply parameters to a string
+        methodSpec.parantheseString = methodSpec.parameters.map((parameter) => `${parameter.codeName}:${parameter.type}, `).join('');
 
         return methodSpec;
       })
       .each((methodSpec) => {
-        methodSpec.responses = _
-        .chain(methodSpec.responses)
-        // resolve response
-        .each((response, httpCode) => {
+        methodSpec.responses = _.chain(methodSpec.responses)
+        // resolve responses
+        .each((response, httpCode:string) => {
           const code = parseInt(httpCode,10);
-          const responseTypes = [];
+
+          let resolvedType, isArray;
           if (response.schema) {
-            let resolvedRef;
             if (response.schema.$ref) {
-              resolvedRef = Generator.refResolver(response.schema.$ref);
-              methodSpec.refs.push(resolvedRef);
-              response = _.assign(response, {type: resolvedRef, isArray: false});
-              { responseTypes.push(resolvedRef);}
+              resolvedType = Generator.refResolver(response.schema.$ref);
+              methodSpec.refs.responses.push(resolvedType);
+              isArray = false;
             }
             else if (response.schema.type === 'array') {
-              resolvedRef = Generator.refResolver(response.schema.items.$ref);
-              methodSpec.refs.push(resolvedRef);
-              response = _.assign(response, {type: resolvedRef, isArray: true});
-              if (code >= 200 && code < 300){ responseTypes.push(resolvedRef+"[]");}
+              resolvedType = Generator.refResolver(response.schema.items.$ref);
+              methodSpec.refs.responses.push(resolvedType);
+              isArray = true;
             }
             else {
-              resolvedRef = response.schema.type
-              response = _.assign(response, {type: resolvedRef, isArray: false});
-              if (code >= 200 && code < 300){ responseTypes.push(resolvedRef);}
+              resolvedType= response.schema.type;
+              isArray = false;
             }
             delete response['schema'];
           }
           else {
-            response = _.assign(response, {type: 'string', isArray: false});
-            if (code >= 200 && code < 300){
-              responseTypes.push('string');
-            } else {
-              responseTypes.push('Error');
-            }
+            resolvedType = 'string';
+            isArray =  false;
+          }
+
+          response = _.assign(response, {type: resolvedType, isArray: isArray})
+
+          const responseTypeString = response.type+(response.isArray ? '[]':'');
+          const responseTypes = [];
+          switch(code){
+            case 200: responseTypes.push(responseTypeString); break;
+            case 202: responseTypes.push('string'); break;
+            case 204: responseTypes.push('void'); break;
+            default:  responseTypes.push(responseTypeString);
           }
 
           methodSpec.responseTypeString = responseTypes.join('|');
         })
         .value();
-
-
       })
       .groupBy((methodSpec) => methodSpec.resource)
       .each((methodSpecGroup, resourceName) => _.each(methodSpecGroup, (methodSpec) => delete methodSpec['resource']))
       .value();
 
     let returnResources = {};
+
     resources = _.each(resources, (methodGroup, resourceName) => {
-      const refs = _.uniq(_.flatten(_.map(methodGroup, (methodSpec) => methodSpec.refs)));
+      const refs = _.uniq(_.flatten(_.map(methodGroup, (methodSpec) => [...methodSpec.refs.parameters, ...methodSpec.refs.responses])));
       const libraries = _.uniq(_.flatten(_.map(methodGroup, (methodSpec) => methodSpec.httpLibraries)));
       returnResources[resourceName] = {
         methods: methodGroup,
