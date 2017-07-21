@@ -22,7 +22,7 @@ export interface {{service.interfaceName}}Config{
  * v{{swaggerSpec.version}}
  */
 @Injectable()
-class {{resourceName}}{
+export class {{resourceName}}{
   config: {{service.interfaceName}}Config;
 
   constructor(private http: Http, @Inject({{service.tokenName}}_CONFIG) config: {{service.interfaceName}}Config){
