@@ -13,48 +13,22 @@
   },
   "host": "127.0.0.1:21122",
   "basePath": "/api/v1",
-  "tags": [
-    {
-      "name": "organizations-resource",
-      "description": "Organizations Resource"
-    },
-    {
-      "name": "token-key-endpoint",
-      "description": "Token Key Endpoint"
-    },
-    {
-      "name": "users-resource",
-      "description": "Users Resource"
-    },
-    {
-      "name": "authorization-endpoint",
-      "description": "Authorization Endpoint"
-    },
-    {
-      "name": "client-details-resource",
-      "description": "Client Details Resource"
-    },
-    {
-      "name": "credentials-resource",
-      "description": "Credentials Resource"
-    },
-    {
-      "name": "check-token-endpoint",
-      "description": "Check Token Endpoint"
-    },
-    {
-      "name": "whitelabel-error-endpoint",
-      "description": "Whitelabel Error Endpoint"
-    },
-    {
-      "name": "token-endpoint",
-      "description": "Token Endpoint"
-    },
-    {
-      "name": "whitelabel-approval-endpoint",
-      "description": "Whitelabel Approval Endpoint"
-    }
-  ],
+  "tags": [{
+    "name": "organizations-resource",
+    "description": "Organizations Resource"
+  }, {
+    "name": "users-resource",
+    "description": "Users Resource"
+  }, {
+    "name": "client-details-resource",
+    "description": "Client Details Resource"
+  }, {
+    "name": "credentials-resource",
+    "description": "Credentials Resource"
+  }, {
+    "name": "simple-error-controller",
+    "description": "Simple Error Controller"
+  }],
   "paths": {
     "/clientdetails/": {
       "get": {
@@ -90,17 +64,15 @@
         "operationId": "createClientDetailsUsingPOST",
         "consumes": ["application/json"],
         "produces": ["application/json"],
-        "parameters": [
-          {
-            "in": "body",
-            "name": "newClientDetails",
-            "description": "newClientDetails",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/ClientDetailsParam"
-            }
+        "parameters": [{
+          "in": "body",
+          "name": "newClientDetails",
+          "description": "newClientDetails",
+          "required": true,
+          "schema": {
+            "$ref": "#/definitions/ClientDetailsParam"
           }
-        ],
+        }],
         "responses": {
           "200": {
             "description": "OK",
@@ -130,15 +102,13 @@
         "operationId": "getClientDetailsByUuidUsingGET",
         "consumes": ["application/json"],
         "produces": ["application/json"],
-        "parameters": [
-          {
-            "name": "uuid",
-            "in": "path",
-            "description": "uuid",
-            "required": true,
-            "type": "string"
-          }
-        ],
+        "parameters": [{
+          "name": "uuid",
+          "in": "path",
+          "description": "uuid",
+          "required": true,
+          "type": "string"
+        }],
         "responses": {
           "200": {
             "description": "OK",
@@ -163,15 +133,13 @@
         "operationId": "deleteClientDetailsUsingDELETE",
         "consumes": ["application/json"],
         "produces": ["application/json"],
-        "parameters": [
-          {
-            "name": "uuid",
-            "in": "path",
-            "description": "uuid",
-            "required": true,
-            "type": "string"
-          }
-        ],
+        "parameters": [{
+          "name": "uuid",
+          "in": "path",
+          "description": "uuid",
+          "required": true,
+          "type": "string"
+        }],
         "responses": {
           "200": {
             "description": "OK"
@@ -193,24 +161,21 @@
         "operationId": "updateClientDetailsUsingPATCH",
         "consumes": ["application/json"],
         "produces": ["application/json"],
-        "parameters": [
-          {
-            "name": "uuid",
-            "in": "path",
-            "description": "uuid",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "in": "body",
-            "name": "updateClientDetails",
-            "description": "updateClientDetails",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/ClientDetailsParam"
-            }
+        "parameters": [{
+          "name": "uuid",
+          "in": "path",
+          "description": "uuid",
+          "required": true,
+          "type": "string"
+        }, {
+          "in": "body",
+          "name": "updateClientDetails",
+          "description": "updateClientDetails",
+          "required": true,
+          "schema": {
+            "$ref": "#/definitions/ClientDetailsParam"
           }
-        ],
+        }],
         "responses": {
           "200": {
             "description": "OK",
@@ -230,39 +195,21 @@
         }
       }
     },
-    "/oauth/authorize": {
+    "/error": {
       "get": {
-        "tags": ["authorization-endpoint"],
-        "summary": "authorize",
-        "operationId": "authorizeUsingGET",
+        "tags": ["simple-error-controller"],
+        "summary": "error",
+        "operationId": "errorUsingGET",
         "consumes": ["application/json"],
         "produces": ["*/*"],
-        "parameters": [
-          {
-            "name": "model",
-            "in": "query",
-            "description": "model",
-            "required": false,
-            "type": "object"
-          },
-          {
-            "name": "parameters",
-            "in": "query",
-            "description": "parameters",
-            "required": true,
-            "items": {
-              "type": "object",
-              "additionalProperties": {
-                "type": "string"
-              }
-            }
-          }
-        ],
         "responses": {
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/ModelAndView"
+              "type": "object",
+              "additionalProperties": {
+                "type": "object"
+              }
             }
           },
           "401": {
@@ -277,37 +224,19 @@
         }
       },
       "head": {
-        "tags": ["authorization-endpoint"],
-        "summary": "authorize",
-        "operationId": "authorizeUsingHEAD",
+        "tags": ["simple-error-controller"],
+        "summary": "error",
+        "operationId": "errorUsingHEAD",
         "consumes": ["application/json"],
         "produces": ["*/*"],
-        "parameters": [
-          {
-            "name": "model",
-            "in": "query",
-            "description": "model",
-            "required": false,
-            "type": "object"
-          },
-          {
-            "name": "parameters",
-            "in": "query",
-            "description": "parameters",
-            "required": true,
-            "items": {
-              "type": "object",
-              "additionalProperties": {
-                "type": "string"
-              }
-            }
-          }
-        ],
         "responses": {
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/ModelAndView"
+              "type": "object",
+              "additionalProperties": {
+                "type": "object"
+              }
             }
           },
           "401": {
@@ -322,43 +251,19 @@
         }
       },
       "post": {
-        "tags": ["authorization-endpoint"],
-        "summary": "approveOrDeny",
-        "operationId": "approveOrDenyUsingPOST",
+        "tags": ["simple-error-controller"],
+        "summary": "error",
+        "operationId": "errorUsingPOST",
         "consumes": ["application/json"],
         "produces": ["*/*"],
-        "parameters": [
-          {
-            "name": "approvalParameters",
-            "in": "query",
-            "description": "approvalParameters",
-            "required": true,
-            "items": {
-              "type": "object",
-              "additionalProperties": {
-                "type": "string"
-              }
-            }
-          },
-          {
-            "name": "model",
-            "in": "query",
-            "description": "model",
-            "required": false,
-            "type": "object"
-          },
-          {
-            "name": "user_oauth_approval",
-            "in": "query",
-            "required": true,
-            "type": "string"
-          }
-        ],
         "responses": {
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/View"
+              "type": "object",
+              "additionalProperties": {
+                "type": "object"
+              }
             }
           },
           "201": {
@@ -376,37 +281,19 @@
         }
       },
       "put": {
-        "tags": ["authorization-endpoint"],
-        "summary": "authorize",
-        "operationId": "authorizeUsingPUT",
+        "tags": ["simple-error-controller"],
+        "summary": "error",
+        "operationId": "errorUsingPUT",
         "consumes": ["application/json"],
         "produces": ["*/*"],
-        "parameters": [
-          {
-            "name": "model",
-            "in": "query",
-            "description": "model",
-            "required": false,
-            "type": "object"
-          },
-          {
-            "name": "parameters",
-            "in": "query",
-            "description": "parameters",
-            "required": true,
-            "items": {
-              "type": "object",
-              "additionalProperties": {
-                "type": "string"
-              }
-            }
-          }
-        ],
         "responses": {
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/ModelAndView"
+              "type": "object",
+              "additionalProperties": {
+                "type": "object"
+              }
             }
           },
           "201": {
@@ -424,37 +311,19 @@
         }
       },
       "delete": {
-        "tags": ["authorization-endpoint"],
-        "summary": "authorize",
-        "operationId": "authorizeUsingDELETE",
+        "tags": ["simple-error-controller"],
+        "summary": "error",
+        "operationId": "errorUsingDELETE",
         "consumes": ["application/json"],
         "produces": ["*/*"],
-        "parameters": [
-          {
-            "name": "model",
-            "in": "query",
-            "description": "model",
-            "required": false,
-            "type": "object"
-          },
-          {
-            "name": "parameters",
-            "in": "query",
-            "description": "parameters",
-            "required": true,
-            "items": {
-              "type": "object",
-              "additionalProperties": {
-                "type": "string"
-              }
-            }
-          }
-        ],
         "responses": {
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/ModelAndView"
+              "type": "object",
+              "additionalProperties": {
+                "type": "object"
+              }
             }
           },
           "401": {
@@ -469,37 +338,19 @@
         }
       },
       "options": {
-        "tags": ["authorization-endpoint"],
-        "summary": "authorize",
-        "operationId": "authorizeUsingOPTIONS",
+        "tags": ["simple-error-controller"],
+        "summary": "error",
+        "operationId": "errorUsingOPTIONS",
         "consumes": ["application/json"],
         "produces": ["*/*"],
-        "parameters": [
-          {
-            "name": "model",
-            "in": "query",
-            "description": "model",
-            "required": false,
-            "type": "object"
-          },
-          {
-            "name": "parameters",
-            "in": "query",
-            "description": "parameters",
-            "required": true,
-            "items": {
-              "type": "object",
-              "additionalProperties": {
-                "type": "string"
-              }
-            }
-          }
-        ],
         "responses": {
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/ModelAndView"
+              "type": "object",
+              "additionalProperties": {
+                "type": "object"
+              }
             }
           },
           "401": {
@@ -514,791 +365,9 @@
         }
       },
       "patch": {
-        "tags": ["authorization-endpoint"],
-        "summary": "authorize",
-        "operationId": "authorizeUsingPATCH",
-        "consumes": ["application/json"],
-        "produces": ["*/*"],
-        "parameters": [
-          {
-            "name": "model",
-            "in": "query",
-            "description": "model",
-            "required": false,
-            "type": "object"
-          },
-          {
-            "name": "parameters",
-            "in": "query",
-            "description": "parameters",
-            "required": true,
-            "items": {
-              "type": "object",
-              "additionalProperties": {
-                "type": "string"
-              }
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/ModelAndView"
-            }
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "204": {
-            "description": "No Content"
-          },
-          "403": {
-            "description": "Forbidden"
-          }
-        }
-      }
-    },
-    "/oauth/check_token": {
-      "get": {
-        "tags": ["check-token-endpoint"],
-        "summary": "checkToken",
-        "operationId": "checkTokenUsingGET",
-        "consumes": ["application/json"],
-        "produces": ["*/*"],
-        "parameters": [
-          {
-            "name": "token",
-            "in": "query",
-            "description": "token",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "type": "object"
-            }
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        }
-      },
-      "head": {
-        "tags": ["check-token-endpoint"],
-        "summary": "checkToken",
-        "operationId": "checkTokenUsingHEAD",
-        "consumes": ["application/json"],
-        "produces": ["*/*"],
-        "parameters": [
-          {
-            "name": "token",
-            "in": "query",
-            "description": "token",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "type": "object"
-            }
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "204": {
-            "description": "No Content"
-          },
-          "403": {
-            "description": "Forbidden"
-          }
-        }
-      },
-      "post": {
-        "tags": ["check-token-endpoint"],
-        "summary": "checkToken",
-        "operationId": "checkTokenUsingPOST",
-        "consumes": ["application/json"],
-        "produces": ["*/*"],
-        "parameters": [
-          {
-            "name": "token",
-            "in": "query",
-            "description": "token",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "type": "object"
-            }
-          },
-          "201": {
-            "description": "Created"
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        }
-      },
-      "put": {
-        "tags": ["check-token-endpoint"],
-        "summary": "checkToken",
-        "operationId": "checkTokenUsingPUT",
-        "consumes": ["application/json"],
-        "produces": ["*/*"],
-        "parameters": [
-          {
-            "name": "token",
-            "in": "query",
-            "description": "token",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "type": "object"
-            }
-          },
-          "201": {
-            "description": "Created"
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        }
-      },
-      "delete": {
-        "tags": ["check-token-endpoint"],
-        "summary": "checkToken",
-        "operationId": "checkTokenUsingDELETE",
-        "consumes": ["application/json"],
-        "produces": ["*/*"],
-        "parameters": [
-          {
-            "name": "token",
-            "in": "query",
-            "description": "token",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "type": "object"
-            }
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "204": {
-            "description": "No Content"
-          },
-          "403": {
-            "description": "Forbidden"
-          }
-        }
-      },
-      "options": {
-        "tags": ["check-token-endpoint"],
-        "summary": "checkToken",
-        "operationId": "checkTokenUsingOPTIONS",
-        "consumes": ["application/json"],
-        "produces": ["*/*"],
-        "parameters": [
-          {
-            "name": "token",
-            "in": "query",
-            "description": "token",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "type": "object"
-            }
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "204": {
-            "description": "No Content"
-          },
-          "403": {
-            "description": "Forbidden"
-          }
-        }
-      },
-      "patch": {
-        "tags": ["check-token-endpoint"],
-        "summary": "checkToken",
-        "operationId": "checkTokenUsingPATCH",
-        "consumes": ["application/json"],
-        "produces": ["*/*"],
-        "parameters": [
-          {
-            "name": "token",
-            "in": "query",
-            "description": "token",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "type": "object"
-            }
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "204": {
-            "description": "No Content"
-          },
-          "403": {
-            "description": "Forbidden"
-          }
-        }
-      }
-    },
-    "/oauth/confirm_access": {
-      "get": {
-        "tags": ["whitelabel-approval-endpoint"],
-        "summary": "getAccessConfirmation",
-        "operationId": "getAccessConfirmationUsingGET",
-        "consumes": ["application/json"],
-        "produces": ["*/*"],
-        "parameters": [
-          {
-            "name": "model",
-            "in": "query",
-            "description": "model",
-            "required": false,
-            "type": "object"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/ModelAndView"
-            }
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        }
-      },
-      "head": {
-        "tags": ["whitelabel-approval-endpoint"],
-        "summary": "getAccessConfirmation",
-        "operationId": "getAccessConfirmationUsingHEAD",
-        "consumes": ["application/json"],
-        "produces": ["*/*"],
-        "parameters": [
-          {
-            "name": "model",
-            "in": "query",
-            "description": "model",
-            "required": false,
-            "type": "object"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/ModelAndView"
-            }
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "204": {
-            "description": "No Content"
-          },
-          "403": {
-            "description": "Forbidden"
-          }
-        }
-      },
-      "post": {
-        "tags": ["whitelabel-approval-endpoint"],
-        "summary": "getAccessConfirmation",
-        "operationId": "getAccessConfirmationUsingPOST",
-        "consumes": ["application/json"],
-        "produces": ["*/*"],
-        "parameters": [
-          {
-            "name": "model",
-            "in": "query",
-            "description": "model",
-            "required": false,
-            "type": "object"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/ModelAndView"
-            }
-          },
-          "201": {
-            "description": "Created"
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        }
-      },
-      "put": {
-        "tags": ["whitelabel-approval-endpoint"],
-        "summary": "getAccessConfirmation",
-        "operationId": "getAccessConfirmationUsingPUT",
-        "consumes": ["application/json"],
-        "produces": ["*/*"],
-        "parameters": [
-          {
-            "name": "model",
-            "in": "query",
-            "description": "model",
-            "required": false,
-            "type": "object"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/ModelAndView"
-            }
-          },
-          "201": {
-            "description": "Created"
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        }
-      },
-      "delete": {
-        "tags": ["whitelabel-approval-endpoint"],
-        "summary": "getAccessConfirmation",
-        "operationId": "getAccessConfirmationUsingDELETE",
-        "consumes": ["application/json"],
-        "produces": ["*/*"],
-        "parameters": [
-          {
-            "name": "model",
-            "in": "query",
-            "description": "model",
-            "required": false,
-            "type": "object"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/ModelAndView"
-            }
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "204": {
-            "description": "No Content"
-          },
-          "403": {
-            "description": "Forbidden"
-          }
-        }
-      },
-      "options": {
-        "tags": ["whitelabel-approval-endpoint"],
-        "summary": "getAccessConfirmation",
-        "operationId": "getAccessConfirmationUsingOPTIONS",
-        "consumes": ["application/json"],
-        "produces": ["*/*"],
-        "parameters": [
-          {
-            "name": "model",
-            "in": "query",
-            "description": "model",
-            "required": false,
-            "type": "object"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/ModelAndView"
-            }
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "204": {
-            "description": "No Content"
-          },
-          "403": {
-            "description": "Forbidden"
-          }
-        }
-      },
-      "patch": {
-        "tags": ["whitelabel-approval-endpoint"],
-        "summary": "getAccessConfirmation",
-        "operationId": "getAccessConfirmationUsingPATCH",
-        "consumes": ["application/json"],
-        "produces": ["*/*"],
-        "parameters": [
-          {
-            "name": "model",
-            "in": "query",
-            "description": "model",
-            "required": false,
-            "type": "object"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/ModelAndView"
-            }
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "204": {
-            "description": "No Content"
-          },
-          "403": {
-            "description": "Forbidden"
-          }
-        }
-      }
-    },
-    "/oauth/error": {
-      "get": {
-        "tags": ["whitelabel-error-endpoint"],
-        "summary": "handleError",
-        "operationId": "handleErrorUsingGET",
-        "consumes": ["application/json"],
-        "produces": ["*/*"],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/ModelAndView"
-            }
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        }
-      },
-      "head": {
-        "tags": ["whitelabel-error-endpoint"],
-        "summary": "handleError",
-        "operationId": "handleErrorUsingHEAD",
-        "consumes": ["application/json"],
-        "produces": ["*/*"],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/ModelAndView"
-            }
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "204": {
-            "description": "No Content"
-          },
-          "403": {
-            "description": "Forbidden"
-          }
-        }
-      },
-      "post": {
-        "tags": ["whitelabel-error-endpoint"],
-        "summary": "handleError",
-        "operationId": "handleErrorUsingPOST",
-        "consumes": ["application/json"],
-        "produces": ["*/*"],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/ModelAndView"
-            }
-          },
-          "201": {
-            "description": "Created"
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        }
-      },
-      "put": {
-        "tags": ["whitelabel-error-endpoint"],
-        "summary": "handleError",
-        "operationId": "handleErrorUsingPUT",
-        "consumes": ["application/json"],
-        "produces": ["*/*"],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/ModelAndView"
-            }
-          },
-          "201": {
-            "description": "Created"
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        }
-      },
-      "delete": {
-        "tags": ["whitelabel-error-endpoint"],
-        "summary": "handleError",
-        "operationId": "handleErrorUsingDELETE",
-        "consumes": ["application/json"],
-        "produces": ["*/*"],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/ModelAndView"
-            }
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "204": {
-            "description": "No Content"
-          },
-          "403": {
-            "description": "Forbidden"
-          }
-        }
-      },
-      "options": {
-        "tags": ["whitelabel-error-endpoint"],
-        "summary": "handleError",
-        "operationId": "handleErrorUsingOPTIONS",
-        "consumes": ["application/json"],
-        "produces": ["*/*"],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/ModelAndView"
-            }
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "204": {
-            "description": "No Content"
-          },
-          "403": {
-            "description": "Forbidden"
-          }
-        }
-      },
-      "patch": {
-        "tags": ["whitelabel-error-endpoint"],
-        "summary": "handleError",
-        "operationId": "handleErrorUsingPATCH",
-        "consumes": ["application/json"],
-        "produces": ["*/*"],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/ModelAndView"
-            }
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "204": {
-            "description": "No Content"
-          },
-          "403": {
-            "description": "Forbidden"
-          }
-        }
-      }
-    },
-    "/oauth/token": {
-      "get": {
-        "tags": ["token-endpoint"],
-        "summary": "getAccessToken",
-        "operationId": "getAccessTokenUsingGET",
-        "consumes": ["application/json"],
-        "produces": ["*/*"],
-        "parameters": [
-          {
-            "name": "parameters",
-            "in": "query",
-            "description": "parameters",
-            "required": true,
-            "items": {
-              "type": "object",
-              "additionalProperties": {
-                "type": "string"
-              }
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/OAuth2AccessToken"
-            }
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        }
-      },
-      "post": {
-        "tags": ["token-endpoint"],
-        "summary": "postAccessToken",
-        "operationId": "postAccessTokenUsingPOST",
-        "consumes": ["application/json"],
-        "produces": ["*/*"],
-        "parameters": [
-          {
-            "name": "parameters",
-            "in": "query",
-            "description": "parameters",
-            "required": true,
-            "items": {
-              "type": "object",
-              "additionalProperties": {
-                "type": "string"
-              }
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/OAuth2AccessToken"
-            }
-          },
-          "201": {
-            "description": "Created"
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        }
-      }
-    },
-    "/oauth/token_key": {
-      "get": {
-        "tags": ["token-key-endpoint"],
-        "summary": "getKey",
-        "operationId": "getKeyUsingGET",
+        "tags": ["simple-error-controller"],
+        "summary": "error",
+        "operationId": "errorUsingPATCH",
         "consumes": ["application/json"],
         "produces": ["*/*"],
         "responses": {
@@ -1307,18 +376,18 @@
             "schema": {
               "type": "object",
               "additionalProperties": {
-                "type": "string"
+                "type": "object"
               }
             }
           },
           "401": {
             "description": "Unauthorized"
           },
+          "204": {
+            "description": "No Content"
+          },
           "403": {
             "description": "Forbidden"
-          },
-          "404": {
-            "description": "Not Found"
           }
         }
       }
@@ -1357,17 +426,15 @@
         "operationId": "createOrganizationUsingPOST",
         "consumes": ["application/json"],
         "produces": ["application/json"],
-        "parameters": [
-          {
-            "in": "body",
-            "name": "newOrganization",
-            "description": "newOrganization",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/OrganizationParam"
-            }
+        "parameters": [{
+          "in": "body",
+          "name": "newOrganization",
+          "description": "newOrganization",
+          "required": true,
+          "schema": {
+            "$ref": "#/definitions/OrganizationParam"
           }
-        ],
+        }],
         "responses": {
           "200": {
             "description": "OK",
@@ -1397,15 +464,13 @@
         "operationId": "getOrganizationByOrganizationIdUsingGET",
         "consumes": ["application/json"],
         "produces": ["application/json"],
-        "parameters": [
-          {
-            "name": "organizationId",
-            "in": "path",
-            "description": "organizationId",
-            "required": true,
-            "type": "string"
-          }
-        ],
+        "parameters": [{
+          "name": "organizationId",
+          "in": "path",
+          "description": "organizationId",
+          "required": true,
+          "type": "string"
+        }],
         "responses": {
           "200": {
             "description": "OK",
@@ -1432,15 +497,13 @@
         "operationId": "getOrganizationByUuidUsingGET",
         "consumes": ["application/json"],
         "produces": ["application/json"],
-        "parameters": [
-          {
-            "name": "uuid",
-            "in": "path",
-            "description": "uuid",
-            "required": true,
-            "type": "string"
-          }
-        ],
+        "parameters": [{
+          "name": "uuid",
+          "in": "path",
+          "description": "uuid",
+          "required": true,
+          "type": "string"
+        }],
         "responses": {
           "200": {
             "description": "OK",
@@ -1465,15 +528,13 @@
         "operationId": "deleteOrganizationUsingDELETE",
         "consumes": ["application/json"],
         "produces": ["application/json"],
-        "parameters": [
-          {
-            "name": "uuid",
-            "in": "path",
-            "description": "uuid",
-            "required": true,
-            "type": "string"
-          }
-        ],
+        "parameters": [{
+          "name": "uuid",
+          "in": "path",
+          "description": "uuid",
+          "required": true,
+          "type": "string"
+        }],
         "responses": {
           "200": {
             "description": "OK"
@@ -1495,24 +556,21 @@
         "operationId": "updateOrganizationUsingPATCH",
         "consumes": ["application/json"],
         "produces": ["application/json"],
-        "parameters": [
-          {
-            "name": "uuid",
-            "in": "path",
-            "description": "uuid",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "in": "body",
-            "name": "updateOrganization",
-            "description": "updateOrganization",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/OrganizationParam"
-            }
+        "parameters": [{
+          "name": "uuid",
+          "in": "path",
+          "description": "uuid",
+          "required": true,
+          "type": "string"
+        }, {
+          "in": "body",
+          "name": "updateOrganization",
+          "description": "updateOrganization",
+          "required": true,
+          "schema": {
+            "$ref": "#/definitions/OrganizationParam"
           }
-        ],
+        }],
         "responses": {
           "200": {
             "description": "OK",
@@ -1539,15 +597,13 @@
         "operationId": "getUsersByOrganizationAndChildOrganizationsUsingGET",
         "consumes": ["application/json"],
         "produces": ["application/json"],
-        "parameters": [
-          {
-            "name": "uuid",
-            "in": "path",
-            "description": "uuid",
-            "required": true,
-            "type": "string"
-          }
-        ],
+        "parameters": [{
+          "name": "uuid",
+          "in": "path",
+          "description": "uuid",
+          "required": true,
+          "type": "string"
+        }],
         "responses": {
           "200": {
             "description": "OK",
@@ -1577,15 +633,13 @@
         "operationId": "getUsersByOrganizationUsingGET",
         "consumes": ["application/json"],
         "produces": ["application/json"],
-        "parameters": [
-          {
-            "name": "uuid",
-            "in": "path",
-            "description": "uuid",
-            "required": true,
-            "type": "string"
-          }
-        ],
+        "parameters": [{
+          "name": "uuid",
+          "in": "path",
+          "description": "uuid",
+          "required": true,
+          "type": "string"
+        }],
         "responses": {
           "200": {
             "description": "OK",
@@ -1642,17 +696,15 @@
         "operationId": "createUserUsingPOST",
         "consumes": ["application/json"],
         "produces": ["application/json"],
-        "parameters": [
-          {
-            "in": "body",
-            "name": "newUser",
-            "description": "newUser",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/UserParam"
-            }
+        "parameters": [{
+          "in": "body",
+          "name": "newUser",
+          "description": "newUser",
+          "required": true,
+          "schema": {
+            "$ref": "#/definitions/UserParam"
           }
-        ],
+        }],
         "responses": {
           "200": {
             "description": "OK",
@@ -1708,15 +760,15 @@
         "operationId": "setLanguageUsingPATCH",
         "consumes": ["application/json"],
         "produces": ["application/json"],
-        "parameters": [
-          {
-            "name": "language",
-            "in": "path",
-            "description": "language",
-            "required": true,
+        "parameters": [{
+          "in": "body",
+          "name": "language",
+          "description": "language",
+          "required": true,
+          "schema": {
             "type": "string"
           }
-        ],
+        }],
         "responses": {
           "200": {
             "description": "OK"
@@ -1740,15 +792,13 @@
         "operationId": "getUserByUuidUsingGET",
         "consumes": ["application/json"],
         "produces": ["application/json"],
-        "parameters": [
-          {
-            "name": "uuid",
-            "in": "path",
-            "description": "uuid",
-            "required": true,
-            "type": "string"
-          }
-        ],
+        "parameters": [{
+          "name": "uuid",
+          "in": "path",
+          "description": "uuid",
+          "required": true,
+          "type": "string"
+        }],
         "responses": {
           "200": {
             "description": "OK",
@@ -1773,15 +823,13 @@
         "operationId": "deleteUserUsingDELETE",
         "consumes": ["application/json"],
         "produces": ["application/json"],
-        "parameters": [
-          {
-            "name": "uuid",
-            "in": "path",
-            "description": "uuid",
-            "required": true,
-            "type": "string"
-          }
-        ],
+        "parameters": [{
+          "name": "uuid",
+          "in": "path",
+          "description": "uuid",
+          "required": true,
+          "type": "string"
+        }],
         "responses": {
           "200": {
             "description": "OK"
@@ -1803,24 +851,21 @@
         "operationId": "updateUserUsingPATCH",
         "consumes": ["application/json"],
         "produces": ["application/json"],
-        "parameters": [
-          {
-            "name": "uuid",
-            "in": "path",
-            "description": "uuid",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "in": "body",
-            "name": "updateUser",
-            "description": "updateUser",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/UserParam"
-            }
+        "parameters": [{
+          "name": "uuid",
+          "in": "path",
+          "description": "uuid",
+          "required": true,
+          "type": "string"
+        }, {
+          "in": "body",
+          "name": "updateUser",
+          "description": "updateUser",
+          "required": true,
+          "schema": {
+            "$ref": "#/definitions/UserParam"
           }
-        ],
+        }],
         "responses": {
           "200": {
             "description": "OK",
@@ -1847,24 +892,21 @@
         "operationId": "activateUserUsingPOST",
         "consumes": ["application/json"],
         "produces": ["application/json"],
-        "parameters": [
-          {
-            "name": "uuid",
-            "in": "path",
-            "description": "uuid",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "in": "body",
-            "name": "credentialsParam",
-            "description": "credentialsParam",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/CredentialsParam"
-            }
+        "parameters": [{
+          "name": "uuid",
+          "in": "path",
+          "description": "uuid",
+          "required": true,
+          "type": "string"
+        }, {
+          "in": "body",
+          "name": "credentialsParam",
+          "description": "credentialsParam",
+          "required": true,
+          "schema": {
+            "$ref": "#/definitions/CredentialsParam"
           }
-        ],
+        }],
         "responses": {
           "200": {
             "description": "OK"
@@ -1891,24 +933,21 @@
         "operationId": "updatePasswordUsingPATCH",
         "consumes": ["application/json"],
         "produces": ["application/json"],
-        "parameters": [
-          {
-            "name": "uuid",
-            "in": "path",
-            "description": "uuid",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "in": "body",
-            "name": "passwordParam",
-            "description": "passwordParam",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/CredentialsParam"
-            }
+        "parameters": [{
+          "name": "uuid",
+          "in": "path",
+          "description": "uuid",
+          "required": true,
+          "type": "string"
+        }, {
+          "in": "body",
+          "name": "passwordParam",
+          "description": "passwordParam",
+          "required": true,
+          "schema": {
+            "$ref": "#/definitions/CredentialsParam"
           }
-        ],
+        }],
         "responses": {
           "200": {
             "description": "OK"
@@ -1932,15 +971,13 @@
         "operationId": "requirePasswordResetUsingGET",
         "consumes": ["application/json"],
         "produces": ["application/json"],
-        "parameters": [
-          {
-            "name": "uuid",
-            "in": "path",
-            "description": "uuid",
-            "required": true,
-            "type": "string"
-          }
-        ],
+        "parameters": [{
+          "name": "uuid",
+          "in": "path",
+          "description": "uuid",
+          "required": true,
+          "type": "string"
+        }],
         "responses": {
           "200": {
             "description": "OK"
@@ -1962,24 +999,21 @@
         "operationId": "resetPasswordUsingPATCH",
         "consumes": ["application/json"],
         "produces": ["application/json"],
-        "parameters": [
-          {
-            "name": "uuid",
-            "in": "path",
-            "description": "uuid",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "in": "body",
-            "name": "passwordParam",
-            "description": "passwordParam",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/CredentialsParam"
-            }
+        "parameters": [{
+          "name": "uuid",
+          "in": "path",
+          "description": "uuid",
+          "required": true,
+          "type": "string"
+        }, {
+          "in": "body",
+          "name": "passwordParam",
+          "description": "passwordParam",
+          "required": true,
+          "schema": {
+            "$ref": "#/definitions/CredentialsParam"
           }
-        ],
+        }],
         "responses": {
           "200": {
             "description": "OK"
@@ -2003,24 +1037,21 @@
         "operationId": "updateUsernameUsingPATCH",
         "consumes": ["application/json"],
         "produces": ["application/json"],
-        "parameters": [
-          {
-            "name": "uuid",
-            "in": "path",
-            "description": "uuid",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "in": "body",
-            "name": "usernameParam",
-            "description": "usernameParam",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/CredentialsParam"
-            }
+        "parameters": [{
+          "name": "uuid",
+          "in": "path",
+          "description": "uuid",
+          "required": true,
+          "type": "string"
+        }, {
+          "in": "body",
+          "name": "usernameParam",
+          "description": "usernameParam",
+          "required": true,
+          "schema": {
+            "$ref": "#/definitions/CredentialsParam"
           }
-        ],
+        }],
         "responses": {
           "200": {
             "description": "OK"
@@ -2044,15 +1075,13 @@
         "operationId": "disableUserUsingPATCH",
         "consumes": ["application/json"],
         "produces": ["application/json"],
-        "parameters": [
-          {
-            "name": "uuid",
-            "in": "path",
-            "description": "uuid",
-            "required": true,
-            "type": "string"
-          }
-        ],
+        "parameters": [{
+          "name": "uuid",
+          "in": "path",
+          "description": "uuid",
+          "required": true,
+          "type": "string"
+        }],
         "responses": {
           "200": {
             "description": "OK"
@@ -2076,15 +1105,13 @@
         "operationId": "enableUserUsingPATCH",
         "consumes": ["application/json"],
         "produces": ["application/json"],
-        "parameters": [
-          {
-            "name": "uuid",
-            "in": "path",
-            "description": "uuid",
-            "required": true,
-            "type": "string"
-          }
-        ],
+        "parameters": [{
+          "name": "uuid",
+          "in": "path",
+          "description": "uuid",
+          "required": true,
+          "type": "string"
+        }],
         "responses": {
           "200": {
             "description": "OK"
@@ -2108,22 +1135,19 @@
         "operationId": "deleteRoleFromUserUsingDELETE",
         "consumes": ["application/json"],
         "produces": ["application/json"],
-        "parameters": [
-          {
-            "name": "uuid",
-            "in": "path",
-            "description": "uuid",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "role",
-            "in": "path",
-            "description": "role",
-            "required": true,
-            "type": "string"
-          }
-        ],
+        "parameters": [{
+          "name": "uuid",
+          "in": "path",
+          "description": "uuid",
+          "required": true,
+          "type": "string"
+        }, {
+          "name": "role",
+          "in": "path",
+          "description": "role",
+          "required": true,
+          "type": "string"
+        }],
         "responses": {
           "200": {
             "description": "OK"
@@ -2145,22 +1169,19 @@
         "operationId": "addRoleToUserUsingPATCH",
         "consumes": ["application/json"],
         "produces": ["application/json"],
-        "parameters": [
-          {
-            "name": "uuid",
-            "in": "path",
-            "description": "uuid",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "role",
-            "in": "path",
-            "description": "role",
-            "required": true,
-            "type": "string"
-          }
-        ],
+        "parameters": [{
+          "name": "uuid",
+          "in": "path",
+          "description": "uuid",
+          "required": true,
+          "type": "string"
+        }, {
+          "name": "role",
+          "in": "path",
+          "description": "role",
+          "required": true,
+          "type": "string"
+        }],
         "responses": {
           "200": {
             "description": "OK"
@@ -2218,217 +1239,6 @@
           "type": "string"
         }
       }
-    },
-    "Organization": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string"
-        },
-        "organizationId": {
-          "type": "string"
-        },
-        "parentOrganization": {
-          "$ref": "#/definitions/Organization"
-        },
-        "type": {
-          "type": "string",
-          "enum": ["RECO", "PARTNER", "CUSTOMER"]
-        },
-        "uuid": {
-          "type": "string"
-        }
-      }
-    },
-    "User": {
-      "type": "object",
-      "properties": {
-        "accountNonExpired": {
-          "type": "boolean"
-        },
-        "accountNonLocked": {
-          "type": "boolean"
-        },
-        "credentialsNonExpired": {
-          "type": "boolean"
-        },
-        "email": {
-          "type": "string"
-        },
-        "enabled": {
-          "type": "boolean"
-        },
-        "failedLoginAttempts": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "familyName": {
-          "type": "string"
-        },
-        "givenName": {
-          "type": "string"
-        },
-        "language": {
-          "type": "string"
-        },
-        "locked": {
-          "type": "boolean"
-        },
-        "organization": {
-          "$ref": "#/definitions/Organization"
-        },
-        "phoneNumber": {
-          "type": "string"
-        },
-        "roles": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "uuid": {
-          "type": "string"
-        }
-      }
-    },
-    "OAuth2RefreshToken": {
-      "type": "object",
-      "properties": {
-        "value": {
-          "type": "string"
-        }
-      }
-    },
-    "GrantedAuthority": {
-      "type": "object",
-      "properties": {
-        "authority": {
-          "type": "string"
-        }
-      }
-    },
-    "ModelAndView": {
-      "type": "object",
-      "properties": {
-        "empty": {
-          "type": "boolean"
-        },
-        "model": {
-          "type": "object"
-        },
-        "modelMap": {
-          "type": "object",
-          "additionalProperties": {
-            "type": "object"
-          }
-        },
-        "reference": {
-          "type": "boolean"
-        },
-        "status": {
-          "type": "string",
-          "enum": [
-            "100",
-            "101",
-            "102",
-            "103",
-            "200",
-            "201",
-            "202",
-            "203",
-            "204",
-            "205",
-            "206",
-            "207",
-            "208",
-            "226",
-            "300",
-            "301",
-            "302",
-            "303",
-            "304",
-            "305",
-            "307",
-            "308",
-            "400",
-            "401",
-            "402",
-            "403",
-            "404",
-            "405",
-            "406",
-            "407",
-            "408",
-            "409",
-            "410",
-            "411",
-            "412",
-            "413",
-            "414",
-            "415",
-            "416",
-            "417",
-            "418",
-            "419",
-            "420",
-            "421",
-            "422",
-            "423",
-            "424",
-            "426",
-            "428",
-            "429",
-            "431",
-            "451",
-            "500",
-            "501",
-            "502",
-            "503",
-            "504",
-            "505",
-            "506",
-            "507",
-            "508",
-            "509",
-            "510",
-            "511"
-          ]
-        },
-        "view": {
-          "$ref": "#/definitions/View"
-        },
-        "viewName": {
-          "type": "string"
-        }
-      }
-    },
-    "OrganizationTreeValue": {
-      "type": "object",
-      "properties": {
-        "childOrganizations": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/OrganizationTreeValue"
-          }
-        },
-        "name": {
-          "type": "string"
-        },
-        "uuid": {
-          "type": "string"
-        }
-      }
-    },
-    "View": {
-      "type": "object",
-      "properties": {
-        "contentType": {
-          "type": "string"
-        }
-      }
-    },
-    "CollectionOfGrantedAuthority": {
-      "type": "object"
     },
     "UserParam": {
       "type": "object",
@@ -2531,36 +1341,82 @@
         }
       }
     },
-    "OAuth2AccessToken": {
+    "Organization": {
       "type": "object",
       "properties": {
-        "additionalInformation": {
-          "type": "object"
+        "name": {
+          "type": "string"
         },
-        "expiration": {
+        "organizationId": {
+          "type": "string"
+        },
+        "parentOrganization": {
+          "$ref": "#/definitions/Organization"
+        },
+        "type": {
           "type": "string",
-          "format": "date-time"
+          "enum": ["RECO", "PARTNER", "CUSTOMER"]
         },
-        "expired": {
+        "uuid": {
+          "type": "string"
+        }
+      }
+    },
+    "User": {
+      "type": "object",
+      "properties": {
+        "accountNonExpired": {
           "type": "boolean"
         },
-        "expiresIn": {
+        "accountNonLocked": {
+          "type": "boolean"
+        },
+        "credentialsNonExpired": {
+          "type": "boolean"
+        },
+        "email": {
+          "type": "string"
+        },
+        "enabled": {
+          "type": "boolean"
+        },
+        "failedLoginAttempts": {
           "type": "integer",
           "format": "int32"
         },
-        "refreshToken": {
-          "$ref": "#/definitions/OAuth2RefreshToken"
+        "familyName": {
+          "type": "string"
         },
-        "scope": {
+        "givenName": {
+          "type": "string"
+        },
+        "language": {
+          "type": "string"
+        },
+        "locked": {
+          "type": "boolean"
+        },
+        "organization": {
+          "$ref": "#/definitions/Organization"
+        },
+        "phoneNumber": {
+          "type": "string"
+        },
+        "roles": {
           "type": "array",
           "items": {
             "type": "string"
           }
         },
-        "tokenType": {
+        "uuid": {
           "type": "string"
-        },
-        "value": {
+        }
+      }
+    },
+    "GrantedAuthority": {
+      "type": "object",
+      "properties": {
+        "authority": {
           "type": "string"
         }
       }
@@ -2578,6 +1434,26 @@
           "type": "string"
         }
       }
+    },
+    "OrganizationTreeValue": {
+      "type": "object",
+      "properties": {
+        "childOrganizations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/OrganizationTreeValue"
+          }
+        },
+        "name": {
+          "type": "string"
+        },
+        "uuid": {
+          "type": "string"
+        }
+      }
+    },
+    "CollectionOfGrantedAuthority": {
+      "type": "object"
     },
     "OrganizationParam": {
       "type": "object",
