@@ -71,10 +71,24 @@ const generator = new Generator(config);
 const outputPath = path.join(process.cwd(), generator.getOutputPath());
 if (!fs.existsSync(outputPath)) {fs.mkdirSync(outputPath); }
 
-fs.writeFileSync(path.join(outputPath,'index.ts'),`
+
+generator.getSpec().then((spec) => {
+   const service = {
+    tokenName: _.snakeCase(spec.info.title).toUpperCase(),
+    interfaceName: _.capitalize(_.camelCase(spec.info.title))
+  };
+  const entryRenderer = Generator.templateCompiler(`
 export * from './models';
 export * from './resources';
-`);
+
+export let {{service.tokenName}}_CONFIG = new InjectionToken<{{service.interfaceName}}Config>('{{service.interfaceName}}');
+
+export interface {{service.interfaceName}}Config{
+  host: string;
+}`);
+
+  fs.writeFileSync(path.join(outputPath,'index.ts'), entryRenderer(service));
+});
 
 // create util file
 const utilsPath = path.join(outputPath, 'utils');
