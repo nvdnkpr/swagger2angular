@@ -10,13 +10,6 @@ import {{this}} from '../models/{{this}}';
 
 import { ClientResponse, toClientResponse } from '../utils';
 
-export let {{service.tokenName}}_CONFIG = new InjectionToken<{{service.interfaceName}}Config>('{{service.interfaceName}}');
-
-export interface {{service.interfaceName}}Config{
-  host: string;
-}
-
-
 /**
  * {{resourceName}}
  * v{{swaggerSpec.version}}
