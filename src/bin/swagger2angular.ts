@@ -132,7 +132,7 @@ generator.getModels().then((models) => {
   });
 
   // create models barrel
-  const modelsRelativePaths = map(modelsPathList, (modelPath) => path.relative(modelsPath, modelPath));
+  const modelsRelativePaths = map(modelsPathList, (modelPath) => path.relative(modelsPath, modelPath).replace('.ts',''));
   fs.writeFileSync(path.join(modelsPath, 'index.ts'), barrelRenderer({paths: modelsRelativePaths}));
 });
 
@@ -149,6 +149,6 @@ generator.getResources().then((resources) => {
   });
 
   // create resources barrel
-  const resourcesRelativePaths = map(resourcesPathList, (resourcePath) => path.relative(resourcesPath, resourcePath));
+  const resourcesRelativePaths = map(resourcesPathList, (resourcePath) => path.relative(resourcesPath, resourcePath).replace('.ts',''));
   fs.writeFileSync(path.join(resourcesPath, 'index.ts'), barrelRenderer({paths: resourcesRelativePaths}));
 });
