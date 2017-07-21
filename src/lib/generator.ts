@@ -309,6 +309,7 @@ export class Generator {
         return methodSpec;
       })
       .each((methodSpec) => {
+        const responseTypes = [];
         methodSpec.responses = _.chain(methodSpec.responses)
         // resolve responses
         .each((response, httpCode:string) => {
@@ -340,7 +341,6 @@ export class Generator {
           response = _.assign(response, {type: resolvedType, isArray: isArray})
 
           const responseTypeString = response.type+(response.isArray ? '[]':'');
-          const responseTypes = [];
           switch(code){
             case 200: responseTypes.push(responseTypeString); break;
             case 202: responseTypes.push('string'); break;
@@ -348,9 +348,10 @@ export class Generator {
             default:  responseTypes.push(responseTypeString);
           }
 
-          methodSpec.responseTypeString = responseTypes.join('|');
         })
         .value();
+        methodSpec.responseTypeString = _.uniq(responseTypes).join('|');
+
       })
       .groupBy((methodSpec) => methodSpec.resource)
       .each((methodSpecGroup, resourceName) => _.each(methodSpecGroup, (methodSpec) => delete methodSpec['resource']))
