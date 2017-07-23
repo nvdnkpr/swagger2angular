@@ -5,8 +5,9 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 
 {{#each resourceDefinition.refs}}
-import {{this}} from '../models/{{this}}';
+import { {{this}} } from '../models/{{this}}';
 {{/each}}
+import { {{service.tokenName}}_CONFIG, {{service.interfaceName}}Config } from '../';
 
 import { ClientResponse, toClientResponse } from '../utils';
 
@@ -57,9 +58,11 @@ export class {{resourceName}}{
       {{/if}}
 
       {{#if has.bodyParameters}}
-      return this.http.{{methodName}}(this.config.host+methodPath, bodyParams, options).map(toClientResponse);
+      return this.http.{{methodName}}(this.config.host+methodPath, bodyParams, options)
+        .map((res:Response) => toClientResponse<{{responseTypeString}}>(res));
       {{else}}
-      return this.http.{{methodName}}(this.config.host+methodPath, options).map(toClientResponse);
+      return this.http.{{methodName}}(this.config.host+methodPath, options)
+        .map((res:Response) => toClientResponse<{{responseTypeString}}>(res));
       {{/if}}
   }
 {{/each}}
