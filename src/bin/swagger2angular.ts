@@ -2,7 +2,7 @@
 import * as path from 'path';
 import * as fs from 'fs';
 
-import { map } from 'lodash';
+import { map, capitalize, snakeCase, camelCase  } from 'lodash';
 
 /**
  * Command line interface (CLI) for generator.
@@ -66,18 +66,18 @@ const config = argv.buildConfig
 const Generator = require('..').Generator;
 
 const generator = new Generator(config);
-
 // create output paths if they don't exist
 const outputPath = path.join(process.cwd(), generator.getOutputPath());
 if (!fs.existsSync(outputPath)) {fs.mkdirSync(outputPath); }
 
 
 generator.getSpec().then((spec) => {
-   const service = {
-    tokenName: _.snakeCase(spec.info.title).toUpperCase(),
-    interfaceName: _.capitalize(_.camelCase(spec.info.title))
+  const service = {
+    tokenName: snakeCase(spec.info.title).toUpperCase(),
+    interfaceName: capitalize(camelCase(spec.info.title))
   };
   const entryRenderer = Generator.templateCompiler(`
+import { InjectionToken } from '@angular/core';
 export * from './models';
 export * from './resources';
 
@@ -87,15 +87,14 @@ export interface {{service.interfaceName}}Config{
   host: string;
 }`);
 
-  fs.writeFileSync(path.join(outputPath,'index.ts'), entryRenderer(service));
+  fs.writeFileSync(path.join(outputPath,'index.ts'), entryRenderer({service}));
 });
 
 // create util file
 const utilsPath = path.join(outputPath, 'utils');
 if (!fs.existsSync(utilsPath)) { fs.mkdirSync(utilsPath); }
 
-fs.writeFileSync(path.join(utilsPath,'index.ts'),
-`
+fs.writeFileSync(path.join(utilsPath,'index.ts'), `
 import { Response, Headers} from '@angular/http';
 
 export interface ClientResponse<T>
@@ -105,10 +104,9 @@ export interface ClientResponse<T>
   code: number;
 }
 
-export const toClientResponse = (res:Response):ClientResponse<T> => {
-  return ({ data: res.json(), headers: res.headers, code: res.status})
-};`
-);
+export function toClientResponse<T>(res:Response):ClientResponse<T> {
+    return ({ data: res.json() as T, headers: res.headers, code: res.status});
+};`);
 
 // create barrel template function
 const barrelRenderer = Generator.templateCompiler(`
