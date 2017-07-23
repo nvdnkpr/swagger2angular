@@ -1,6 +1,6 @@
 {
   "name": "swagger2angular",
-  "version": "0.9.0",
+  "version": "0.10.0",
   "description": "Create Angular API Client from swagger json",
   "homepage": "https://github.com/nvdnkpr/swagger2angular",
   "main": "index.js",
