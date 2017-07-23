@@ -58,9 +58,10 @@ const config = argv.buildConfig
     output: argv.outputPath,
     debug: argv.debug,
     templatePath: argv.templatePath,
-    modelTemplate: argv.modelTemplate,
-    packageTemplate: argv.packageTemplate || '',
-    resourceTemplate: argv.resourceTemplate
+    templateFiles: {
+      model: argv.modelTemplate,
+      resource: argv.resourceTemplate
+    }
   };
 
 const Generator = require('..').Generator;
@@ -80,6 +81,7 @@ generator.getSpec().then((spec) => {
 import { InjectionToken } from '@angular/core';
 export * from './models';
 export * from './resources';
+export * from './utils';
 
 export let {{service.tokenName}}_CONFIG = new InjectionToken<{{service.interfaceName}}Config>('{{service.interfaceName}}');
 
