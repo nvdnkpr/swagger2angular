@@ -13,13 +13,14 @@ import { ClientResponse, toClientResponse } from '../utils';
 
 /**
  * {{resourceName}}
- * v{{swaggerSpec.version}}
+ * v{{swagger.version}}
  */
 @Injectable()
 export class {{resourceName}}{
   config: {{service.interfaceName}}Config;
 
   constructor(private http: Http, @Inject({{service.tokenName}}_CONFIG) config: {{service.interfaceName}}Config){
+    this.basePath = '{{swagger.basePath}}';
     this.config = config;
   }
 
@@ -58,10 +59,10 @@ export class {{resourceName}}{
       {{/if}}
 
       {{#if has.bodyParameters}}
-      return this.http.{{methodName}}(this.config.host+methodPath, bodyParams, options)
+      return this.http.{{methodName}}(this.config.host+this.basePath+methodPath, bodyParams, options)
         .map((res:Response) => toClientResponse<{{responseTypeString}}>(res));
       {{else}}
-      return this.http.{{methodName}}(this.config.host+methodPath, options)
+      return this.http.{{methodName}}(this.config.host+this.basePath+methodPath, options)
         .map((res:Response) => toClientResponse<{{responseTypeString}}>(res));
       {{/if}}
   }
