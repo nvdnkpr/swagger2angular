@@ -106,7 +106,7 @@ export class Generator {
   };
 
   constructor(generatorOptions: GeneratorOptions) {
-    const options = _.assign(Generator.DEFAULT_OPTIONS, generatorOptions);
+    const options = _.merge(Generator.DEFAULT_OPTIONS, generatorOptions);
     Object.keys(options).forEach((optionKey) => this[optionKey] = options[optionKey]);
     console.log(`Generating from ${this.swaggerSpecFile} to ${this.outputPath}`);
 
@@ -119,9 +119,9 @@ export class Generator {
         };
         this.models = _.each(this.swaggerSpec.definitions, Generator.retrieveModels) as ModelType[];
         this.resources = Generator.retrieveResources(this.swaggerSpec.paths);
+        console.log('Swagger file parsed without errors')
       })
       .catch((error) => console.error(error));
-
     this.renderer = {
       resource: compile(fs.readFileSync(options.templateFiles.resource, 'utf-8')),
       model: compile(fs.readFileSync(options.templateFiles.model, 'utf-8'))
