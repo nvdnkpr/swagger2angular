@@ -7,7 +7,10 @@ import 'rxjs/add/operator/map';
 {{#each resourceDefinition.refs}}
 import { {{this}} } from '../models/{{this}}';
 {{/each}}
-import { {{service.tokenName}}_CONFIG, {{service.interfaceName}}Config } from '../';
+
+import { ResourceConfig } from '../';
+
+export let {{service.tokenName}}_{{resourceToken}} = new InjectionToken<ResourceConfig>('resource.config');
 
 import { ClientResponse, toClientResponse } from '../utils';
 
@@ -20,7 +23,7 @@ export class {{resourceName}}{
   basePath: string;
   config: {{service.interfaceName}}Config;
 
-  constructor(private http: Http, @Inject({{service.tokenName}}_CONFIG) config: {{service.interfaceName}}Config){
+  constructor(private http: Http, @Inject({{service.tokenName}}_{{resourceToken}}) config: {{service.interfaceName}}Config){
     this.basePath = '{{swagger.basePath}}';
     this.config = config;
   }

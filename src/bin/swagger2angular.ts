@@ -83,11 +83,10 @@ export * from './models';
 export * from './resources';
 export * from './utils';
 
-export let {{service.tokenName}}_CONFIG = new InjectionToken<{{service.interfaceName}}Config>('{{service.interfaceName}}');
-
-export interface {{service.interfaceName}}Config{
+export interface ResourceConfig{
   host: string;
-}`);
+}
+`);
 
   fs.writeFileSync(path.join(outputPath,'index.ts'), entryRenderer({service}));
 });

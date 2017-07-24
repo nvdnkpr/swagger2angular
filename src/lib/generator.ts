@@ -256,6 +256,7 @@ export class Generator {
       })
       .map((methodSpec: any) => {
         methodSpec.resource = _.capitalize(_.camelCase(methodSpec.tags[0]));
+        methodSpec.resourceToken = _.camelCase(methodSpec.tags[0]).toUpperCase();
         delete methodSpec['tags'];
         return methodSpec;
       })
