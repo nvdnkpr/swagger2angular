@@ -142,7 +142,7 @@ if (!fs.existsSync(resourcesPath)) { fs.mkdirSync(resourcesPath); }
 generator.getResources().then((resources) => {
   const resourcesPathList = map(resources, (resourceDefinition, resourceName) => {
     const resourcePath = path.join(resourcesPath, `${resourceName}.ts`);
-    fs.writeFileSync(resourcePath, generator.processResource({resourceName, resourceDefinition}));
+    fs.writeFileSync(resourcePath, generator.processResource({resourceName, resourceToken: resourceName.toUpperCase(), resourceDefinition}));
 
     return resourcePath;
   });
