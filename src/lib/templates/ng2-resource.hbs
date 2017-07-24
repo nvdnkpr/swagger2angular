@@ -23,7 +23,7 @@ export class {{resourceName}}{
   basePath: string;
   config: ResourceConfig;
 
-  constructor(private http: Http, @Inject({{service.tokenName}}_{{resourceToken}}) config: {{service.interfaceName}}Config){
+  constructor(private http: Http, @Inject({{service.tokenName}}_{{resourceToken}}) config: ResourceConfig){
     this.basePath = '{{swagger.basePath}}';
     this.config = config;
   }
