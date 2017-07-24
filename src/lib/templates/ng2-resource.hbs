@@ -17,6 +17,7 @@ import { ClientResponse, toClientResponse } from '../utils';
  */
 @Injectable()
 export class {{resourceName}}{
+  basePath: string;
   config: {{service.interfaceName}}Config;
 
   constructor(private http: Http, @Inject({{service.tokenName}}_CONFIG) config: {{service.interfaceName}}Config){
